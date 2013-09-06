@@ -26,18 +26,20 @@ class DBMS {
 	//length of row depends on type
 	
 	//remove entry
-	//removeEntry(primary key?)
+	//removeEntry(primary key?)	
 	
-	
-	//selection - select rows that satisfy a condition
-	//projection - select columns
-	//renaming attributes
-	//set union
-	//set difference
-	//cross product
-	
-	//write to file
-	//read from file
-	
+	/*
+			create table
+			insert into
+			delete
+			selection
+			projection
+			renaming
+			set union
+			set difference
+			cross product
+			update
+			show
+*/
 }
 
