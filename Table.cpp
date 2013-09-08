@@ -106,6 +106,23 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 		cout<<"attributes did not match, union is untestable.\n";
 	return vecFinal;
 }
+vector<vector<string> > Table::crossproduct(vector<vector<string> > vec2) {
+	vector<vector<string> > vecFinal;
+	//check column names, if any are the same, abort and return original vector
+	for(int i = 0; i < vec.size(); i++) {
+		for (int j = 0; j < vec2.size(); j++) {
+			if (vec[0][i] == vec2[0][j]) { //check all elements of vec2[0] with each element of vec1[0]
+				cout << "Unable to do cross product, some column is the same" << endl;
+				return vec; //abort!
+			}
+		}
+	}
+	//construct cross product table
+	int newrows = vec[0].size() * vec2[0].size();
+	int newcolumns = vec.size() + vec2.size();
+
+
+}
 void Table::deleteRow(int n)
 {
 	if (vec.size() > n)
