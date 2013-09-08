@@ -73,6 +73,25 @@ int Table::getColumn(string s)
 		return -1;
 	//cout<<"\n";
 }
+void Table::deleteRow(int n)
+{
+	if (vec.size() > n)
+	{
+		vec.erase(vec.begin() + n);
+	}
+	cout<<"row "<<n<<" deleted.\n";
+}
+void Table::deleteColumn(int n)
+{
+	for (unsigned i = 0; i < vec.size(); ++i)
+	{
+		if (vec[i].size() > n)
+		{
+			vec[i].erase(vec[i].begin() + n);
+		}
+	}
+	cout<<"column "<<n<<" deleted.\n";
+}
 void Table::show(string Colname, string comparitor){
 	cout<<"finding elements of column \""<<Colname<<"\" with type \""<< comparitor<<"\".\n";
 	int keyColumn = -1;

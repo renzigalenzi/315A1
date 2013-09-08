@@ -45,6 +45,8 @@ public:
 	}
 	void fill();
 	void display();
+	void deleteRow(int n);
+	void deleteColumn(int n);
 	void display(int rows);
 	int getRows(){
 	return rows;
@@ -62,6 +64,7 @@ public:
 	if (row>=0&&column>=0)
 	vec[row][column]=name;
 	}
+	
 	void show(string Colname, string comparitor);
 	void add(){
 	vec.push_back(vector<string>(columns));

@@ -42,7 +42,10 @@ int main()
 	m.changeValue(m.getLastRow(),m.getColumn("sex"),"F");
 	m.changeValue(m.getLastRow(),m.getColumn("securit"),"3");
 	m.display();
-
+	m.deleteRow(3);
+	m.display();
+	m.deleteColumn(2);
+	m.display();
 	//create the main window and display it
 
 
