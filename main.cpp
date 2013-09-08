@@ -24,16 +24,25 @@ int main()
 
 	int NumColumns=5;
 	int NumRows=5;
-	Table m(NumColumns, NumRows);
-	m.fill(m.getColumns(), m.getRows());
-	m.display(m.getColumns(), m.getRows());
+	Table m(NumRows, NumColumns);
+	m.fill();
+	m.display();
 	m.setColumnName(0,"type");
 	m.setColumnName(1,"name");
 	m.setColumnName(2,"age");
 	m.setColumnName(3,"sex");
 	m.setColumnName(4,"security");
-	m.display(m.getColumns(), m.getRows());
-	m.show("name", "1");
+	m.changeValue(2,3,"changed");
+	m.display();
+	m.show("sex", "changed");
+	m.add();
+	m.changeValue(m.getLastRow(),m.getColumn("type"),"0");
+	m.changeValue(m.getLastRow(),m.getColumn("name"),"Panda");
+	m.changeValue(m.getLastRow(),m.getColumn("age"),"19");
+	m.changeValue(m.getLastRow(),m.getColumn("sex"),"F");
+	m.changeValue(m.getLastRow(),m.getColumn("securit"),"3");
+	m.display();
+
 	//create the main window and display it
 
 

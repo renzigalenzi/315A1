@@ -34,17 +34,17 @@ public:
    // constructors 
 	
 
-    Table(int c, int r){
+    Table(int r, int c){
 	columns = c;
 	rows = r;
-    vector< vector<string> > vec2(columns, vector<string>(rows));
+    vector< vector<string> > vec2(rows, vector<string>(columns));
 	vec=vec2;
     // Write
     vec[0][0] = 10;
     // Read
 	}
-	void fill(int columns, int rows);
-	void display(int columns, int rows);
+	void fill();
+	void display();
 	void display(int rows);
 	int getRows(){
 	return rows;
@@ -52,11 +52,23 @@ public:
 	int getColumns(){
 	return columns;
 	}
+
+	int getColumn(string s);
+
 	void setColumnName(int number, string name){
 	vec[0][number]=name;
 	}
+	void changeValue(int row, int column, string name){
+	if (row>=0&&column>=0)
+	vec[row][column]=name;
+	}
 	void show(string Colname, string comparitor);
-   
+	void add(){
+	vec.push_back(vector<string>(columns));
+	}
+	int getLastRow(){
+		return vec.size()-1;
+	}
   
 
 };

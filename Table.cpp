@@ -22,7 +22,7 @@ using namespace std;
 
 
 
-void Table::fill(int Columns, int Rows)
+void Table::fill()
 {
 	for (int i=0; i<vec.size(); i++)
 	{
@@ -36,12 +36,12 @@ void Table::fill(int Columns, int Rows)
 		}
 	}
 }
-void Table::display(int Columns, int Rows)
+void Table::display()
 {
-	for (int i=0; i<Columns; i++)
+	for (int i=0; i<vec.size(); i++)
 	{
 		cout<<"\n";
-		for (int j=0; j<Rows; j++)
+		for (int j=0; j<vec[i].size(); j++)
 		{
 			cout<<vec[i][j];
 			for (int k=vec[i][j].length(); k<12;k++)
@@ -60,6 +60,18 @@ void Table::display(int Rows)
 		}
 	
 	cout<<"\n";
+}
+int Table::getColumn(string s)
+{
+		for (int j=0; j<vec[0].size(); j++)
+		{
+			if (vec[0][j]==s)
+			{
+			return j;
+			}
+		}
+		return -1;
+	//cout<<"\n";
 }
 void Table::show(string Colname, string comparitor){
 	cout<<"finding elements of column \""<<Colname<<"\" with type \""<< comparitor<<"\".\n";
