@@ -33,7 +33,9 @@ public:
 
    // constructors 
 	
-
+	Table(vector< vector<string> > vec2){
+	vec=vec2;
+	}
     Table(int r, int c){
 	columns = c;
 	rows = r;
@@ -56,7 +58,11 @@ public:
 	}
 
 	int getColumn(string s);
-
+	vector<vector<string> > getTable()
+	{
+    return vec;
+	}
+	vector<vector<string> > setunion(vector<vector<string> > vec2);
 	void setColumnName(int number, string name){
 	vec[0][number]=name;
 	}

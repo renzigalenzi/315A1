@@ -73,6 +73,37 @@ int Table::getColumn(string s)
 		return -1;
 	//cout<<"\n";
 }
+vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
+	vector< vector<string> > vecFinal;
+	bool check = true;
+	int offsety=0;
+	if (vec[0].size()!=vec2[0].size())
+	return vecFinal;
+	for (int j=0; j<vec[0].size(); j++)
+		{
+			if (vec[0][j]!=vec2[0][j])
+			{
+			check = false;
+			}
+		}
+	if (check == true)// preliminary check to make sure all attributes are the same, after which the compared vector is moved
+	vecFinal=vec2;//into the returned vector so values can be manipulated without upsetting the compared vector
+	for (int j=1; j<vec.size()&&j<vecFinal.size(); j++)
+		{
+		for (int k=0; k<vec[0].size()&&k<vecFinal[0].size(); k++)
+			{
+
+				if (vec[j+offsety][k]!=vecFinal[j][k])
+				{
+				vecFinal.erase(vecFinal.begin() + j);
+				offsety++;
+				k=0;
+				cout<<"discrepancy in the vectors at - "<<j<<" "<<k<<"\n";
+				}
+			}
+		}
+	return vecFinal;
+}
 void Table::deleteRow(int n)
 {
 	if (vec.size() > n)
