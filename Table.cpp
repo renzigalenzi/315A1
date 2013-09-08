@@ -79,15 +79,15 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 	int offsety=0;
 	if (vec[0].size()!=vec2[0].size())
 	return vecFinal;
-	for (int j=0; j<vec[0].size(); j++)
+	for (int j=0; j<vec[0].size(); j++)//comparing only the first (attribute) row.
 		{
-			if (vec[0][j]!=vec2[0][j])
+			if (vec[0][j]!=vec2[0][j])//if any differences in attributes - then nothing will happen. (I believe) -LE
 			{
 			check = false;
 			}
 		}
 	if (check == true)// preliminary check to make sure all attributes are the same, after which the compared vector is moved
-	vecFinal=vec2;//into the returned vector so values can be manipulated without upsetting the compared vector
+		vecFinal=vec2;//into the returned vector so values can be manipulated without ruining the compared vector
 	for (int j=1; j<vec.size()&&j<vecFinal.size(); j++)
 		{
 		for (int k=0; k<vec[0].size()&&k<vecFinal[0].size(); k++)
@@ -101,7 +101,9 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 				cout<<"discrepancy in the vectors at - "<<j<<" "<<k<<"\n";
 				}
 			}
-		}
+	}
+	if (!check)
+		cout<<"attributes did not match, union is untestable.\n";
 	return vecFinal;
 }
 void Table::deleteRow(int n)

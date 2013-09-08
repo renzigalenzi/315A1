@@ -49,6 +49,7 @@ int main()
 	Table f(m.getTable());
 	f.display();
 	f.changeValue(1,m.getColumn("type"),"0");
+	//f.setColumnName(3,"securit"); //uncomment to show a failed union.
 	f.display();
 	Table end(m.setunion(f.getTable()));
 	end.display();
