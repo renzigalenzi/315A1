@@ -22,6 +22,7 @@ class Table {
 	int rows; 
 	int columns;
 	vector< vector<string> > vec;
+	string title;
 public: 
 
 	vector<string> ColumnNames;
@@ -35,15 +36,25 @@ public:
 	
 	Table(vector< vector<string> > vec2){
 	vec=vec2;
+	title = "default";
+	}
+	Table(vector< vector<string> > vec2,string title2){
+	vec=vec2;
+	title = title2;
 	}
     Table(int r, int c){
 	columns = c;
 	rows = r;
     vector< vector<string> > vec2(rows, vector<string>(columns));
 	vec=vec2;
-    // Write
-    vec[0][0] = 10;
-    // Read
+	title = "default";
+	}
+	Table(int r, int c,string title2){
+	columns = c;
+	rows = r;
+    vector< vector<string> > vec2(rows, vector<string>(columns));
+	vec=vec2;
+	title = title2;
 	}
 	void fill();
 	void display();
@@ -55,6 +66,12 @@ public:
 	}
 	int getColumns(){
 	return columns;
+	}
+	void setTitle(string n){
+	title = n;
+	}
+	string getTitle(){
+	return title;
 	}
 
 	int getColumn(string s);

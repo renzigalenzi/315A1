@@ -38,6 +38,7 @@ void Table::fill()
 }
 void Table::display()
 {
+	cout<<"\nTable name: "<<title;
 	for (int i=0; i<vec.size(); i++)
 	{
 		cout<<"\n";

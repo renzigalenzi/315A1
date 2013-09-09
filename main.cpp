@@ -24,7 +24,7 @@ int main()
 
 	int NumColumns=5;
 	int NumRows=5;
-	Table m(NumRows, NumColumns);
+	Table m(NumRows, NumColumns,"Original");
 	m.fill();
 	m.display();
 	m.setColumnName(0,"type");
@@ -33,6 +33,7 @@ int main()
 	m.setColumnName(3,"sex");
 	m.setColumnName(4,"security");
 	m.changeValue(2,3,"changed");
+	m.setTitle("Attributes Added");
 	m.display();
 	m.show("sex", "changed");
 	m.add();
@@ -41,17 +42,21 @@ int main()
 	m.changeValue(m.getLastRow(),m.getColumn("age"),"19");
 	m.changeValue(m.getLastRow(),m.getColumn("sex"),"F");
 	m.changeValue(m.getLastRow(),m.getColumn("securit"),"3");
+	m.setTitle("Row Added");
 	m.display();
 	m.deleteRow(3);
+	m.setTitle("Row Deleted");
 	m.display();
 	m.deleteColumn(2);
+	m.setTitle("Column Deleted");
 	m.display();
-	Table f(m.getTable());
+	Table f(m.getTable(),"Second Table");
 	f.display();
 	f.changeValue(1,m.getColumn("type"),"0");
 	//f.setColumnName(3,"securit"); //uncomment to show a failed union.
+	m.setTitle("Second Table Altered");
 	f.display();
-	Table end(m.setunion(f.getTable()));
+	Table end(m.setunion(f.getTable()),"Union Table");
 	end.display();
 
 
