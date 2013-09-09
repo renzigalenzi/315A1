@@ -6,7 +6,7 @@
 // Ross Hudgins
 //=======================================
 
-#include "Table.h"
+#include "DBMS.h"
 
 #include <iostream>
 #include <vector>
@@ -23,7 +23,7 @@ int main()
 {
 	int NumColumns=5;
 	int NumRows=5;
-	Table m(NumRows, NumColumns,"Original");
+	DBMS m(NumRows, NumColumns,"Original");
 	m.fill();
 	m.display();
 	m.setColumnName(0,"type");
@@ -49,27 +49,27 @@ int main()
 	m.deleteColumn(2);
 	m.setTitle("Column Deleted - Original Final");
 	m.display();
-	Table f(m.getTable(),"Second Table");
+	DBMS f(m.getDBMS(),"Second DBMS");
 	f.display();
 	f.changeValue(1,f.getColumn("type"),"0");
 	f.changeValue(4,f.getColumn("type"),"3");
 	//f.setColumnName(3,"securit"); //uncomment to show a failed union.
-	f.setTitle("Second Table Altered");
+	f.setTitle("Second DBMS Altered");
 	f.display();
-	Table tunion(m.setunion(f.getTable()),"Union Table - Original Final x Second Altered");
+	DBMS tunion(m.setunion(f.getDBMS()),"Union DBMS - Original Final x Second Altered");
 	tunion.display();
-	Table tdifference(m.setdifference(f.getTable()),"Difference Table - Original Final x Second Altered");
+	DBMS tdifference(m.setdifference(f.getDBMS()),"Difference DBMS - Original Final x Second Altered");
 	tdifference.display();
 	//test cross product
-	Table cross1(5, 3, "Cross 1"); //rows > columns on either table breaks it for some reason, vector out of range
-	//Table cross1(3, 3, "Cross 1");
+	DBMS cross1(5, 3, "Cross 1"); //rows > columns on either DBMS breaks it for some reason, vector out of range
+	//DBMS cross1(3, 3, "Cross 1");
 	cross1.fill();
 	cross1.setColumnName(0, "one");
 	cross1.setColumnName(1, "two");
 	//cross1.setColumnName(2, "three");
 	cross1.display();
 
-	Table cross2(5, 3, "Cross 2"); 
+	DBMS cross2(5, 3, "Cross 2"); 
 	cross2.fill();
 	cross2.setColumnName(0, "four");
 	cross2.setColumnName(1, "five");
@@ -77,8 +77,8 @@ int main()
 	cross2.display();
 
 	vector<vector<string> > crossend;
-	crossend = cross1.crossproduct(cross2.getTable());
-	Table crossfinal(crossend, "Cross 1 X Cross 2");
+	crossend = cross1.crossproduct(cross2.getDBMS());
+	DBMS crossfinal(crossend, "Cross 1 X Cross 2");
 	crossfinal.display();
 	
 	system("PAUSE");

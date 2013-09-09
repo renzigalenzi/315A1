@@ -6,40 +6,108 @@
 // Ross Hudgins
 //=======================================
 
-#include "stdlib.h"
-#include <string>
-#include <vector>
+#ifndef DBMS_H_ 
 
-class DBMS {
-	public:
-		vector< vector <string> > database;
-		
-			
-	//operations
-	//----------------------------------------------
-	//create table
-	//createTable(string tablename)
-	//
+#define DBMS_H_
+
+#include <vector>
+#include <string>
+#include <iostream> 
+
+
+
+using namespace std;
+
+class DBMS { 
+	int rows; 
+	int columns;
+	vector< vector<string> > vec;
+	string title;
+public: 
+	vector<string> ColumnNames;
+
+   // constructors 
 	
-	//add entry
-	//addEntry(string type, vector of attributes?)
-	//length of row depends on type
+	DBMS(vector< vector<string> > vec2){
+		columns = vec2.size();
+		rows = vec2[0].size();
+		vec=vec2;
+		title = "default";
+	}
+	DBMS(vector< vector<string> > vec2,string title2){
+		columns = vec2.size();
+		rows = vec2[0].size();
+		vec=vec2;
+		title = title2;
+	}
+    DBMS(int r, int c){
+		columns = c;
+		rows = r;
+		vector< vector<string> > vec2(rows, vector<string>(columns));
+		vec=vec2;
+		title = "default";
+	}
+	DBMS(int r, int c,string title2){
+		columns = c;
+		rows = r;
+		vector< vector<string> > vec2(rows, vector<string>(columns));
+		vec=vec2;
+		title = title2;
+	}
+
+	//Functions
+	void fill();
+	void display();
+	void deleteRow(int n);
+	void deleteColumn(int n);
+	void display(int rows);
+	int getRows(){
+		return rows;
+	}
+	int getColumns(){
+		return columns;
+	}
+	void setTitle(string n){
+		title = n;
+	}
+	string getTitle(){
+		return title;
+	}
+
+	int getColumn(string s);
+	vector<vector<string> > getDBMS() {
+		return vec;
+	}
+	vector<vector<string> > setunion(vector<vector<string> > vec2);
+	vector<vector<string> > setdifference(vector<vector<string> > vec2);
+	vector<vector<string> > crossproduct(vector<vector<string> > vec2); // DBMSs must have rows <= columns
+	void setColumnName(int number, string name){
+		vec[0][number]=name;
+	}
+	void changeValue(int row, int column, string name){
+		if (row>=0&&column>=0)
+		vec[row][column]=name;
+	}
 	
-	//remove entry
-	//removeEntry(primary key?)	
-	
-	/*
-			create table
-			insert into
-			delete
-			selection
-			projection
-			renaming
-			set union
-			set difference
-			cross product
-			update
-			show
-*/
-}
+	void show(string Colname, string comparitor);
+	void add(){
+		vec.push_back(vector<string>(columns));
+	}
+	int getLastRow(){
+		return vec.size()-1;
+	}
+  
+
+};
+
+//Overloading 
+bool operator==(const DBMS& m1, const DBMS& m2); 
+
+std::ostream& operator<<(ostream& os, const DBMS& m);
+
+
+std::istream& operator>>(istream& is, DBMS& m);
+
+
+#endif // end of the file DBMS.h  
 
