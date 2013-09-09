@@ -97,12 +97,10 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 			for (int k=0; k<vec[j].size()&&k<vec2[i].size(); k++)
 			{
 
-				if (k<vec[j].size()&&k<vec2[i].size()&&vec[j][k]!=vec2[i][k])
+				if (k<vec[j].size()&&k<vec2[i].size()&&vec[j][k]!=vec2[i][k])// if there is something different in a row then dont worry about that row
 				k=vec[j].size()+vec2[i].size();
-				cout<<"k= "<<k<<" i= "<<i<<" j= "<<j<<"\n";
-				if (k==vec[j].size()-1||k==vec2[i].size()-1)
+				if (k==vec[j].size()-1||k==vec2[i].size()-1) // if you get to the end of a compared row and everything is the same, there was a duplicate. so delete it.
 				{
-				cout<<vecFinal.size()<< " "<<" i = "<<i<<" offset = "<< offsety << " result = "<< i-offsety <<" test \n";
 				resultant=i-offsety;
 				vecFinal.erase(vecFinal.begin() + resultant);
 				offsety++;
@@ -112,7 +110,7 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 		}
 	}
 	offsety=vecFinal.size();
-	for (int i = 0; i < vec.size(); i++) {
+	for (int i = 0; i < vec.size(); i++) {// now that the final vector only contains the differences between the first and second vector, add the first vector back in.
 		vecFinal.push_back(vec[i]);
 	}
 	vecFinal.erase(vecFinal.begin() +offsety);
