@@ -107,6 +107,15 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 		cout<<"attributes did not match, union is untestable.\n";
 	return vecFinal;
 }
+//helper for cross product---------------------------------------------
+vector<string> appendvector(vector<string> vec1, vector<string> vec2) {
+	vector<string> tempvec = vec1;
+	for (int i = 0; i < vec2.size(); i++) {
+		tempvec.push_back(vec2[i]);
+	}
+	return tempvec;
+}
+//---------------------------------------------------------------------
 vector<vector<string> > Table::crossproduct(vector<vector<string> > vec2) {
 	vector<vector<string> > vecFinal;
 	//check column names, if any are the same, abort and return original vector
@@ -119,10 +128,17 @@ vector<vector<string> > Table::crossproduct(vector<vector<string> > vec2) {
 		}
 	}
 	//construct cross product table
-	int newrows = vec[0].size() * vec2[0].size();
-	int newcolumns = vec.size() + vec2.size();
+	int finalrows = vec[0].size() * vec2[0].size();
+	int finalcolumns = vec.size() + vec2.size();
+	vector<string> tempvec;
 
-
+	for (int i = 0; i < vec.size(); i++) {
+		for (int j = 0; j < vec2.size(); j++) {
+			tempvec = appendvector(vec[i], vec2[j]);
+			vecFinal.push_back(tempvec);
+		}
+	}
+	return vecFinal;
 }
 void Table::deleteRow(int n)
 {
