@@ -40,7 +40,7 @@ int main()
 	m.changeValue(m.getLastRow(),m.getColumn("name"),"Panda");
 	m.changeValue(m.getLastRow(),m.getColumn("age"),"19");
 	m.changeValue(m.getLastRow(),m.getColumn("sex"),"F");
-	m.changeValue(m.getLastRow(),m.getColumn("security"),"3");
+	m.changeValue(m.getLastRow(),m.getColumn("securit"),"3");
 	m.setTitle("Row Added");
 	m.display();
 	m.deleteRow(3);
@@ -52,7 +52,7 @@ int main()
 	Table f(m.getTable(),"Second Table");
 	f.display();
 	f.changeValue(1,f.getColumn("type"),"0");
-	f.changeValue(4,f.getColumn("type"),"3");
+	//f.changeValue(4,f.getColumn("type"),"3");
 	//f.setColumnName(3,"securit"); //uncomment to show a failed union.
 	f.setTitle("Second Table Altered");
 	f.display();

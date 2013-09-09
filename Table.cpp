@@ -78,6 +78,7 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 	vector< vector<string> > vecFinal;
 	bool check = true;
 	int offsety=0;
+	int resultant = 0;
 	if (vec[0].size()!=vec2[0].size())
 	return vecFinal;
 	for (int j=0; j<vec[0].size(); j++)//comparing only the first (attribute) row.
@@ -101,8 +102,9 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 				cout<<"k= "<<k<<" i= "<<i<<" j= "<<j<<"\n";
 				if (k==vec[j].size()-1||k==vec2[i].size()-1)
 				{
-				cout<<vecFinal.size()<< " "<<" test \n";
-				vecFinal.erase(vecFinal.begin() + i-offsety);
+				cout<<vecFinal.size()<< " "<<" i = "<<i<<" offset = "<< offsety << " result = "<< i-offsety <<" test \n";
+				resultant=i-offsety;
+				vecFinal.erase(vecFinal.begin() + resultant);
 				offsety++;
 				cout<<" no discrepancy in the vectors at - "<<j<<" "<<k<<" offset is now "<<offsety<<"\n";
 				}
