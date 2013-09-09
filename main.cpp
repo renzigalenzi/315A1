@@ -21,7 +21,6 @@ using namespace std;
 
 int main()
 {
-
 	int NumColumns=5;
 	int NumRows=5;
 	Table m(NumRows, NumColumns,"Original");
@@ -59,11 +58,27 @@ int main()
 	Table end(m.setunion(f.getTable()),"Union Table");
 	end.display();
 
+	//test cross product
+	//Table cross1(5, 3, "Cross 1"); //rows > columns on either table breaks it for some reason, vector out of range
+	Table cross1(3, 3, "Cross 1");
+	cross1.fill();
+	cross1.setColumnName(0, "one");
+	cross1.setColumnName(1, "two");
+	//cross1.setColumnName(2, "three");
+	cross1.display();
 
-	//create the main window and display it
+	Table cross2(3, 3, "Cross 2"); 
+	cross2.fill();
+	cross2.setColumnName(0, "four");
+	cross2.setColumnName(1, "five");
+	cross2.setColumnName(2, "six");
+	cross2.display();
 
-
-
+	vector<vector<string> > crossend;
+	crossend = cross1.crossproduct(cross2.getTable());
+	Table crossfinal(crossend, "Cross 1 X Cross 2");
+	crossfinal.display();
+	
 	system("PAUSE");
 	return 0;
 }

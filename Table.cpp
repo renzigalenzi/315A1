@@ -128,12 +128,13 @@ vector<vector<string> > Table::crossproduct(vector<vector<string> > vec2) {
 		}
 	}
 	//construct cross product table
-	int finalrows = vec[0].size() * vec2[0].size();
-	int finalcolumns = vec.size() + vec2.size();
+	int finalrows = vec[0].size() * vec2[0].size(); //hmm, i don't even use this
+	int finalcolumns = vec.size() + vec2.size(); //or this
 	vector<string> tempvec;
+	vecFinal.push_back(appendvector(vec[0], vec2[0]));
 
-	for (int i = 0; i < vec.size(); i++) {
-		for (int j = 0; j < vec2.size(); j++) {
+	for (int i = 1; i < vec.size(); i++) {
+		for (int j = 1; j < vec2.size(); j++) {
 			tempvec = appendvector(vec[i], vec2[j]);
 			vecFinal.push_back(tempvec);
 		}
