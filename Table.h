@@ -79,6 +79,7 @@ public:
 		return vec;
 	}
 	vector<vector<string> > setunion(vector<vector<string> > vec2);
+	vector<vector<string> > setdifference(vector<vector<string> > vec2);
 	vector<vector<string> > crossproduct(vector<vector<string> > vec2); // tables must have rows <= columns
 	void setColumnName(int number, string name){
 		vec[0][number]=name;

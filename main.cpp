@@ -47,18 +47,19 @@ int main()
 	m.setTitle("Row Deleted");
 	m.display();
 	m.deleteColumn(2);
-	m.setTitle("Column Deleted");
+	m.setTitle("Column Deleted - Original Final");
 	m.display();
 	Table f(m.getTable(),"Second Table");
 	f.display();
 	f.changeValue(1,f.getColumn("type"),"0");
-	//f.changeValue(4,f.getColumn("type"),"3");
+	f.changeValue(4,f.getColumn("type"),"3");
 	//f.setColumnName(3,"securit"); //uncomment to show a failed union.
 	f.setTitle("Second Table Altered");
 	f.display();
-	Table end(m.setunion(f.getTable()),"Union Table");
-	end.display();
-
+	Table tunion(m.setunion(f.getTable()),"Union Table - Original Final x Second Altered");
+	tunion.display();
+	Table tdifference(m.setdifference(f.getTable()),"Difference Table - Original Final x Second Altered");
+	tdifference.display();
 	//test cross product
 	Table cross1(5, 3, "Cross 1"); //rows > columns on either table breaks it for some reason, vector out of range
 	//Table cross1(3, 3, "Cross 1");

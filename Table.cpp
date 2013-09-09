@@ -74,6 +74,7 @@ int Table::getColumn(string s)
 		return -1;
 	//cout<<"\n";
 }
+//UNION----------------------------------------------------------------------------------------
 vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 	vector< vector<string> > vecFinal;
 	bool check = true;
@@ -104,7 +105,7 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 				resultant=i-offsety;
 				vecFinal.erase(vecFinal.begin() + resultant);
 				offsety++;
-				cout<<" no discrepancy in the vectors at - "<<j<<" "<<k<<" offset is now "<<offsety<<"\n";
+				//cout<<" no discrepancy in the vectors at - "<<j<<" "<<k<<" offset is now "<<offsety<<"\n";
 				}
 			}
 		}
@@ -112,6 +113,74 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 	offsety=vecFinal.size();
 	for (int i = 0; i < vec.size(); i++) {// now that the final vector only contains the differences between the first and second vector, add the first vector back in.
 		vecFinal.push_back(vec[i]);
+	}
+	vecFinal.erase(vecFinal.begin() +offsety);
+	if (!check)
+		cout<<"attributes did not match, union is untestable.\n";
+	return vecFinal;
+}
+
+// DIFFERENCE ----------------------------------------------------------------------------------------------------
+vector<vector<string> > Table::setdifference(vector<vector<string> > vec2){
+	vector< vector<string> > vecFinal;
+	vector< vector<string> > vecFinal2;
+	bool check = true;
+	int offsety=0;
+	int resultant = 0;
+	if (vec[0].size()!=vec2[0].size())
+	return vecFinal;
+	for (int j=0; j<vec[0].size(); j++)//comparing only the first (attribute) row.
+		{
+			if (vec[0][j]!=vec2[0][j])//if any differences in attributes - then nothing will happen. (I believe) -LE
+			{
+			check = false;
+			}
+		}
+	if (check == true)// preliminary check to make sure all attributes are the same, after which the compared vector is moved
+		vecFinal=vec2;
+		vecFinal2=vec;//into the returned vector so values can be manipulated without ruining the compared vector
+	for (int i=1; i<vec2.size(); i++)
+	{
+		for (int j=1; j<vec.size(); j++)
+		{
+			for (int k=0; k<vec[j].size()&&k<vec2[i].size(); k++)
+			{
+
+				if (k<vec[j].size()&&k<vec2[i].size()&&vec[j][k]!=vec2[i][k])// if there is something different in a row then dont worry about that row
+				k=vec[j].size()+vec2[i].size();
+				if (k==vec[j].size()-1||k==vec2[i].size()-1) // if you get to the end of a compared row and everything is the same, there was a duplicate. so delete it.
+				{
+				resultant=i-offsety;
+				vecFinal.erase(vecFinal.begin() + resultant);
+				offsety++;
+				//cout<<" no discrepancy in the vectors at - "<<j<<" "<<k<<" offset is now "<<offsety<<"\n";
+				}
+			}
+		}
+	}
+	offsety = 0;
+	for (int i=1; i<vec.size(); i++)
+	{
+		for (int j=1; j<vec2.size(); j++)
+		{
+			for (int k=0; k<vec2[j].size()&&k<vec[i].size(); k++)
+			{
+
+				if (k<vec2[j].size()&&k<vec[i].size()&&vec2[j][k]!=vec[i][k])// if there is something different in a row then dont worry about that row
+				k=vec2[j].size()+vec[i].size();
+				if (k==vec2[j].size()-1||k==vec[i].size()-1) // if you get to the end of a compared row and everything is the same, there was a duplicate. so delete it.
+				{
+				resultant=i-offsety;
+				vecFinal2.erase(vecFinal2.begin() + resultant);
+				offsety++;
+				//cout<<" no discrepancy in the vectors at - "<<j<<" "<<k<<" offset is now "<<offsety<<"\n";
+				}
+			}
+		}
+	}
+	offsety=vecFinal.size();
+	for (int i = 0; i < vecFinal2.size(); i++) {// now that the final vector only contains the differences between the first and second vector, add the first vector back in.
+		vecFinal.push_back(vecFinal2[i]);
 	}
 	vecFinal.erase(vecFinal.begin() +offsety);
 	if (!check)
