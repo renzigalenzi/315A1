@@ -89,20 +89,31 @@ vector<vector<string> > Table::setunion(vector<vector<string> > vec2){
 		}
 	if (check == true)// preliminary check to make sure all attributes are the same, after which the compared vector is moved
 		vecFinal=vec2;//into the returned vector so values can be manipulated without ruining the compared vector
-	for (int j=1; j<vec.size()&&j<vecFinal.size(); j++)
+	for (int i=1; i<vec2.size(); i++)
+	{
+		for (int j=1; j<vec.size(); j++)
 		{
-		for (int k=0; k<vec[0].size()&&k<vecFinal[0].size(); k++)
+			for (int k=0; k<vec[j].size()&&k<vec2[i].size(); k++)
 			{
 
-				if (vec[j+offsety][k]!=vecFinal[j][k])
+				if (k<vec[j].size()&&k<vec2[i].size()&&vec[j][k]!=vec2[i][k])
+				k=vec[j].size()+vec2[i].size();
+				cout<<"k= "<<k<<" i= "<<i<<" j= "<<j<<"\n";
+				if (k==vec[j].size()-1||k==vec2[i].size()-1)
 				{
-				vecFinal.erase(vecFinal.begin() + j);
+				cout<<vecFinal.size()<< " "<<" test \n";
+				vecFinal.erase(vecFinal.begin() + i-offsety);
 				offsety++;
-				k=0;
-				cout<<"discrepancy in the vectors at - "<<j<<" "<<k<<"\n";
+				cout<<" no discrepancy in the vectors at - "<<j<<" "<<k<<" offset is now "<<offsety<<"\n";
 				}
 			}
+		}
 	}
+	offsety=vecFinal.size();
+	for (int i = 0; i < vec.size(); i++) {
+		vecFinal.push_back(vec[i]);
+	}
+	vecFinal.erase(vecFinal.begin() +offsety);
 	if (!check)
 		cout<<"attributes did not match, union is untestable.\n";
 	return vecFinal;
@@ -119,8 +130,8 @@ vector<string> appendvector(vector<string> vec1, vector<string> vec2) {
 vector<vector<string> > Table::crossproduct(vector<vector<string> > vec2) {
 	vector<vector<string> > vecFinal;
 	//check column names, if any are the same, abort and return original vector
-	for(int i = 0; i < vec.size(); i++) {
-		for (int j = 0; j < vec2.size(); j++) {
+	for(int i = 0; i < vec[0].size(); i++) {
+		for (int j = 0; j < vec2[0].size(); j++) {
 			if (vec[0][i] == vec2[0][j]) { //check all elements of vec2[0] with each element of vec1[0]
 				cout << "Unable to do cross product, some column is the same" << endl;
 				return vec; //abort!
@@ -132,7 +143,6 @@ vector<vector<string> > Table::crossproduct(vector<vector<string> > vec2) {
 	int finalcolumns = vec.size() + vec2.size(); //or this
 	vector<string> tempvec;
 	vecFinal.push_back(appendvector(vec[0], vec2[0]));
-
 	for (int i = 1; i < vec.size(); i++) {
 		for (int j = 1; j < vec2.size(); j++) {
 			tempvec = appendvector(vec[i], vec2[j]);

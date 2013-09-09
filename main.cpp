@@ -40,7 +40,7 @@ int main()
 	m.changeValue(m.getLastRow(),m.getColumn("name"),"Panda");
 	m.changeValue(m.getLastRow(),m.getColumn("age"),"19");
 	m.changeValue(m.getLastRow(),m.getColumn("sex"),"F");
-	m.changeValue(m.getLastRow(),m.getColumn("securit"),"3");
+	m.changeValue(m.getLastRow(),m.getColumn("security"),"3");
 	m.setTitle("Row Added");
 	m.display();
 	m.deleteRow(3);
@@ -51,23 +51,24 @@ int main()
 	m.display();
 	Table f(m.getTable(),"Second Table");
 	f.display();
-	f.changeValue(1,m.getColumn("type"),"0");
+	f.changeValue(1,f.getColumn("type"),"0");
+	f.changeValue(4,f.getColumn("type"),"3");
 	//f.setColumnName(3,"securit"); //uncomment to show a failed union.
-	m.setTitle("Second Table Altered");
+	f.setTitle("Second Table Altered");
 	f.display();
 	Table end(m.setunion(f.getTable()),"Union Table");
 	end.display();
 
 	//test cross product
-	//Table cross1(5, 3, "Cross 1"); //rows > columns on either table breaks it for some reason, vector out of range
-	Table cross1(3, 3, "Cross 1");
+	Table cross1(5, 3, "Cross 1"); //rows > columns on either table breaks it for some reason, vector out of range
+	//Table cross1(3, 3, "Cross 1");
 	cross1.fill();
 	cross1.setColumnName(0, "one");
 	cross1.setColumnName(1, "two");
 	//cross1.setColumnName(2, "three");
 	cross1.display();
 
-	Table cross2(3, 3, "Cross 2"); 
+	Table cross2(5, 3, "Cross 2"); 
 	cross2.fill();
 	cross2.setColumnName(0, "four");
 	cross2.setColumnName(1, "five");
