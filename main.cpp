@@ -41,6 +41,10 @@ int main()
 	m.changeValue(m.getLastRow(),m.getColumn("age"),"19");
 	m.changeValue(m.getLastRow(),m.getColumn("sex"),"F");
 	m.changeValue(m.getLastRow(),m.getColumn("securit"),"3");
+	m.changeValue(3,m.getColumn("age"),"2");
+	m.display();
+	m.deleteAttr(m.getColumn("age"),"2");
+	m.display();
 	m.setTitle("Row Added");
 	m.display();
 	m.deleteRow(3);

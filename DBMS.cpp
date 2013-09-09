@@ -228,6 +228,18 @@ void DBMS::deleteRow(int n)
 	}
 	cout<<"row "<<n<<" deleted.\n";
 }
+void DBMS::deleteAttr(int n,string attr)
+{
+	for (int i = 0; i< vec.size(); i++)
+	{
+		if (vec[i][n]==attr)
+		{
+		vec.erase(vec.begin() + i);
+		i--;
+		}
+	}
+	cout<<"row "<<n<<" deleted.\n";
+}
 void DBMS::deleteColumn(int n)
 {
 	for (unsigned i = 0; i < vec.size(); ++i)

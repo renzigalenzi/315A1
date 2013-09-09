@@ -58,6 +58,7 @@ public:
 	//Functions
 	void fill();
 	void display();
+	void deleteAttr(int attribute,string comparitor);
 	void deleteRow(int n);
 	void deleteColumn(int n);
 	void display(int rows);
@@ -85,7 +86,7 @@ public:
 		vec[0][number]=name;
 	}
 	void changeValue(int row, int column, string name){
-		if (row>=0&&column>=0)
+		if (row>=0&&column>=0&&vec.size()>row&&vec[0].size()>column)
 		vec[row][column]=name;
 	}
 	
