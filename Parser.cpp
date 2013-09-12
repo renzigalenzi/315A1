@@ -27,7 +27,7 @@ vector<string> Parser::readfromfile(string tablename) {
 	file.open(filename.c_str());
 	if (file.is_open()) {
 		while (!file.eof()){
-			getline(file, temp);
+			getline(file, temp, ';');
 			cout << "temp = " << temp << endl;
 			toReturn.push_back(temp);
 		}
