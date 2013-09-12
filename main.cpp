@@ -7,6 +7,7 @@
 //=======================================
 
 #include "DBMS.h"
+#include "Parser.h"
 
 #include <iostream>
 #include <vector>
@@ -85,6 +86,14 @@ int main()
 	DBMS crossfinal(crossend, "Cross 1 X Cross 2");
 	crossfinal.display();
 	
+	//checking read file
+	Parser parser;
+	cout << "reading from file" << endl;
+	vector<string> stuff = parser.readfromfile("table");
+	for each (string s in stuff) {
+		cout << s << endl;
+	}
+
 	system("PAUSE");
 	return 0;
 }
