@@ -91,7 +91,8 @@ int main()
 	cout << "reading from file" << endl;
 	vector<string> stuff = parser.readfromfile("table");
 	for each (string s in stuff) {
-		cout << s << endl;
+		parser.execute(s);
+		//cout << s << endl;
 	}
 
 	system("PAUSE");

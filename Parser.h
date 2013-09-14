@@ -18,12 +18,17 @@
 using namespace std;
 
 class Parser {
-	vector<DBMS> tablevector; //something like this?
+	vector<DBMS> tablevector; //something like this? - yeah, I am not sure quite yet if we should instantiate here or in DBMS with a function call.
+	vector<string> keywords;
 
 public:
-	Parser() {}
-	
+	Parser() {
+		string keyArray[7] = {"CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW"};
+		keywords.assign(keyArray, keyArray+7);
+	}
 	vector<string> readfromfile(string filename); //each element is a line, delimited by ';'
+	void execute(string s);
+
 
 };
 
