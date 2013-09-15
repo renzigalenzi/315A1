@@ -63,10 +63,10 @@ public:
 	void deleteColumn(int n);
 	void display(int rows);
 	int getRows(){
-		return rows;
+		return vec.size();
 	}
 	int getColumns(){
-		return columns;
+		return vec[0].size();
 	}
 	void setTitle(string n){
 		title = n;
@@ -76,6 +76,7 @@ public:
 	}
 
 	int getColumn(string s);
+	string getElement(int x, int y);
 	vector<vector<string> > getDBMS() {
 		return vec;
 	}

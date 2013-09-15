@@ -74,6 +74,11 @@ int DBMS::getColumn(string s)
 		return -1;
 	//cout<<"\n";
 }
+string DBMS::getElement(int x, int y)
+{
+		return vec[x][y];
+	//cout<<"\n";
+}
 //UNION----------------------------------------------------------------------------------------
 vector<vector<string> > DBMS::setunion(vector<vector<string> > vec2){
 	vector< vector<string> > vecFinal;
