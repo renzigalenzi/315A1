@@ -30,6 +30,7 @@ public:
 	void execute(string s);
 	void callFunction(int j, int position, vector<string> words);
 	int getTable(string name);
+	bool isname(string name);
 };
 
 

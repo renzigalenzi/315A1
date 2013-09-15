@@ -120,9 +120,9 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		{
 		tablevector[getTable(tablename)].setColumnName(i,columnnames[i]);
 		}
-		tablevector[getTable(tablename)].display();
+		//tablevector[getTable(tablename)].display();
 		break;
-	case 1: cout << "Inserting element into table "<<words[position+2]<<"\n";
+	case 1: cout << "\nInserting element into table "<<words[position+2]<<"\n";
 		tablevector[getTable(words[position+2])].add();
 		break;
 	case 2: cout << "char value with "<<words[position+2]<<" characters will be possible in items within table.getColumn("<<words[position-1]<<")\n";
@@ -132,7 +132,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	case 4:	if (words[position+2]=="RELATION")
 		/**/		break;
 			columnCounter=0;
-			cout<< "Setting attribute "<<columnCounter<<" to "<<words[position+3]<<"\n";
+			cout<< "\nSetting attribute "<<columnCounter<<" to "<<words[position+3]<<"\n";
 			tablevector[getTable(words[position-1])].changeValue(tablevector[getTable(words[position-1])].getLastRow(),columnCounter,words[position+3]);
 			for (int i = position+2; i<words.size(); i++)
 			{
@@ -144,14 +144,14 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 					
 				}
 			} 
-			tablevector[0].display();
+			//tablevector[0].display();
 		break;
 	case 5: 
 		columnCounter=0;
 		tablename=words[words.size()-1];
 		tablename2=words[position-3];
 		column = words[position+3];
-		cout<<"for "<<tablename<<" "<<tablevector[getTable(tablename)].getRows()<<",  -  "<<tablename2<<" . add()\n";
+		cout<<"\nfor "<<tablename<<" "<<tablevector[getTable(tablename)].getRows()<<",  -  "<<tablename2<<" . add()\n";
 		for (int i=1; i<tablevector[getTable(tablename)].getRows(); i++)
 		{
 			tablevector[getTable(tablename2)].add();
@@ -161,7 +161,12 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		tablevector[getTable(tablename)].display();
 		tablevector[getTable(tablename2)].display();
 		break;
-	case 6: cout << "show me your stuff :D\n";
+	case 6: cout << "displaying "<< words[position+1]<<"\n";
+		tablename = words[position+1];
+		if (isname(tablename))
+			tablevector[getTable(words[position+1])].display();
+		else
+			cout<<tablename<<" is not a created table at the moment.\n";
 		break;
 	default: cout << "how did that happen?\n";
 		break;
@@ -175,6 +180,15 @@ int Parser::getTable(string name)
 			return i;
 	}
 	return -1;
+}
+bool Parser::isname(string name)
+{
+	for (int i=0; i<tablevector.size(); i++)
+	{
+		if (tablevector[i].getTitle()==name)
+			return 1;
+	}
+	return 0;
 }
 
 
