@@ -91,8 +91,11 @@ int main()
 	cout << "reading from file" << endl;
 	vector<string> stuff = parser.readfromfile("table");
 	for each (string s in stuff) {
+		if (s.size()>0)
+		{
 		cout <<"\nPARSING:: \n"<< s << "\n\n";
 		parser.execute(s);
+		}
 		
 	}
 	string user;

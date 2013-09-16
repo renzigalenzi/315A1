@@ -87,7 +87,7 @@ void Parser::execute(string s){
 			}
 		}
 	}
-	if (keywordsFound==0)
+	if (keywordsFound==0&&s.size()>0)
 		cout<<"Not a valid line.\n";
 }
 
