@@ -1,119 +1,214 @@
+reading from file
 
-Table name: Original
-2           4           3           1           2
-1           3           3           3           1
-2           2           2           4           2
-4           4           3           4           1
-4           1           3           2           1
+PARSING::
+CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY
+KEY (name, kind);
 
+I am creating a table called animals
+setting Columns to -
+Column 0 = name
+Column 1 = kind
+Column 2 = years
+char value with 20 characters will be possible in items within table.getColumn(n
+ame)
+char value with 8 characters will be possible in items within table.getColumn(ki
+nd)
+int value at table.getColumn(years)
 
-Table name: Attributes Added
-type        name        age         sex         security
-1           3           3           3           1
-2           2           2           changed     2
-4           4           3           4           1
-4           1           3           2           1
-
-finding elements of column "sex" with type "changed".
-Item Found!
-2           2           2           changed     2
-
-Table name: Attributes Added
-type        name        age         sex         security
-1           3           3           3           1
-2           2           2           changed     2
-4           4           2           4           1
-4           1           3           2           1
-0           Panda       19          F
-
-row 2 deleted.
-
-Table name: Attributes Added
-type        name        age         sex         security
-1           3           3           3           1
-4           1           3           2           1
-0           Panda       19          F
+PARSING::
+INSERT INTO animals VALUES FROM ("Joe", "cat", 4);
 
 
-Table name: Row Added
-type        name        age         sex         security
-1           3           3           3           1
-4           1           3           2           1
-0           Panda       19          F
+Inserting element into table animals
 
-row 3 deleted.
+Setting attribute 0 to "Joe"
+Setting attribute 1 to "cat"
+Setting attribute 2 to 4
 
-Table name: Row Deleted
-type        name        age         sex         security
-1           3           3           3           1
-4           1           3           2           1
-
-column 2 deleted.
-
-Table name: Column Deleted - Original Final
-type        name        sex         security
-1           3           3           1
-4           1           2           1
+PARSING::
+INSERT INTO animals VALUES FROM ("Spot", "dog", 10);
 
 
-Table name: Second DBMS
-type        name        sex         security
-1           3           3           1
-4           1           2           1
+Inserting element into table animals
+
+Setting attribute 0 to "Spot"
+Setting attribute 1 to "dog"
+Setting attribute 2 to 10
+
+PARSING::
+INSERT INTO animals VALUES FROM ("Snoopy", "dog", 3);
 
 
-Table name: Second DBMS Altered
-type        name        sex         security
-0           3           3           1
-4           1           2           1
+Inserting element into table animals
+
+Setting attribute 0 to "Snoopy"
+Setting attribute 1 to "dog"
+Setting attribute 2 to 3
+
+PARSING::
+INSERT INTO animals VALUES FROM ("Tweety", "bird", 1);
 
 
-Table name: Union DBMS - Original Final x Second Altered
-type        name        sex         security
-0           3           3           1
-1           3           3           1
-4           1           2           1
+Inserting element into table animals
+
+Setting attribute 0 to "Tweety"
+Setting attribute 1 to "bird"
+Setting attribute 2 to 1
+
+PARSING::
+INSERT INTO animals VALUES FROM ("Joe", "bird", 2);
 
 
-Table name: Difference DBMS - Original Final x Second Altered
-type        name        sex         security
-0           3           3           1
-1           3           3           1
+Inserting element into table animals
+
+Setting attribute 0 to "Joe"
+Setting attribute 1 to "bird"
+Setting attribute 2 to 2
+
+PARSING::
+SHOW animals;
+
+displaying animals
+
+Table name: animals
+name        kind        years
+"Joe"       "cat"       4
+"Spot"      "dog"       10
+"Snoopy"    "dog"       3
+"Tweety"    "bird"      1
+"Joe"       "bird"      2
 
 
-Table name: Cross 1
-one         two         1
-3           4           4
-3           4           3
-2           1           4
-4           4           3
+PARSING::
+dogs <- select (kind == "dog") animals;
+
+solving for <-
+keywords are/is select at 2
+
+dealing with a selection
+first element is (kind=="dog")
+second element is animals
 
 
-Table name: Cross 2
-four        five        six
-2           2           1
-2           4           2
-1           4           1
-3           2           2
+PARSING::
+old_dogs <- select (age > 10) dogs;
+
+solving for <-
+keywords are/is select at 2
+
+dealing with a selection
+first element is (age>10)
+second element is dogs
 
 
-Table name: Cross 1 X Cross 2
-one         two         1           four        five        six
-3           4           4           2           2           1
-3           4           4           2           4           2
-3           4           4           1           4           1
-3           4           4           3           2           2
-3           4           3           2           2           1
-3           4           3           2           4           2
-3           4           3           1           4           1
-3           4           3           3           2           2
-2           1           4           2           2           1
-2           1           4           2           4           2
-2           1           4           1           4           1
-2           1           4           3           2           2
-4           4           3           2           2           1
-4           4           3           2           4           2
-4           4           3           1           4           1
-4           4           3           3           2           2
+PARSING::
+cats_or_dogs <- dogs + (select (kind == "cat") animals);
 
-Press any key to continue . . .
+solving for <-
+keywords are/is select at 5
+
+dealing with a selection
+first element is (kind=="cat")
+second element is animals
+
+
+PARSING::
+CREATE TABLE species (kind VARCHAR(10)) PRIMARY KEY (kind);
+
+I am creating a table called species
+setting Columns to -
+Column 0 = kind
+char value with 10 characters will be possible in items within table.getColumn(k
+ind)
+
+PARSING::
+INSERT INTO species VALUES FROM RELATION project (kind) animals;
+
+
+Inserting element into table species
+
+for animals 6,  -  species . add()
+
+Table name: animals
+name        kind        years
+"Joe"       "cat"       4
+"Spot"      "dog"       10
+"Snoopy"    "dog"       3
+"Tweety"    "bird"      1
+"Joe"       "bird"      2
+
+
+Table name: species
+kind
+
+"cat"
+"dog"
+"dog"
+"bird"
+"bird"
+
+
+PARSING::
+a <- rename (aname, akind) (project (name, kind) animals);
+
+solving for <-
+keywords are/is rename at 2
+keywords are/is project at 11
+
+dealing with a projection
+first element is (name,kind)
+second element is animals
+
+dealing with a renaming
+first element is (aname,akind)
+second element is (project(name,kind)animals)
+
+
+PARSING::
+common_names <- project (name) (select (aname == name && akind != kind) (a * ani
+mals));
+
+solving for <-
+keywords are/is project at 2
+keywords are/is select at 8
+
+dealing with a selection
+first element is (aname==name&&akind!=kind)
+second element is (a*animals)
+
+dealing with a projection
+first element is (name)
+second element is (select(aname==name&&akind!=kind)(a*animals))
+
+
+PARSING::
+answer <- common_names;
+
+solving for <-
+
+
+PARSING::
+SHOW answer;
+
+displaying answer
+answer - ERROR:  is not a created table at the moment.
+
+PARSING::
+WRITE animals;
+
+Wrtiting animals to output file
+
+Table name: animals
+name        kind        years
+"Joe"       "cat"       4
+"Spot"      "dog"       10
+"Snoopy"    "dog"       3
+"Tweety"    "bird"      1
+"Joe"       "bird"      2
+
+
+PARSING::
+CLOSE animals;
+
+Closing animals output file
+Please enter a line. To exit, type "EXIT;"
