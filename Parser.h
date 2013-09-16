@@ -20,6 +20,8 @@ using namespace std;
 class Parser {
 	vector<DBMS> tablevector; //something like this? - yeah, I am not sure quite yet if we should instantiate here or in DBMS with a function call.
 	vector<string> keywords;
+	vector<DBMS> tempvector;
+
 
 public:
 	Parser() {
@@ -35,6 +37,7 @@ public:
 	int getKeywordPosition(vector<string> words, string keyword);
 	int getKeyNum(string keyword);
 	string getElementString(vector<string> words, int position, int elementNumber);
+	string solveElementString(vector<string> words, int position, int elementNumber);
 	bool valid(int length,vector<string> words, int position);
 };
 
