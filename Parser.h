@@ -23,14 +23,17 @@ class Parser {
 
 public:
 	Parser() {
-		string keyArray[7] = {"CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW"};// dont forget to change size after adding anything
-		keywords.assign(keyArray, keyArray+7);// change this size too
+		string keyArray[11] = {"CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW","<-","select","project","rename"};// dont forget to change size after adding anything
+		keywords.assign(keyArray, keyArray+11);// change this size too
 	}
 	vector<string> readfromfile(string filename); //each element is a line, delimited by ';'
 	void execute(string s);
 	void callFunction(int j, int position, vector<string> words);
 	int getTable(string name);
 	bool isname(string name);
+	string getNextKeyword(vector<string> words, int position);
+	int getKeywordPosition(vector<string> words, string keyword);
+	int getKeyNum(string keyword);
 };
 
 

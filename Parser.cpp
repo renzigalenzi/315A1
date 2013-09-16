@@ -91,8 +91,10 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	string tablename;
 	string tablename2;
 	string column;
+	int tempposition;
+	vector<string> tempkeyword;
 
-	//     starting with case 0: -  "CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW"
+	//     starting with case 0: -  "CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW","<-","select","project","rename"
 	switch(keyword)
 	{
 	case 0: 
@@ -170,6 +172,43 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		else
 			cout<<tablename<<" is not a created table at the moment.\n";
 		break;
+
+
+	case 7: cout << "<-\n";
+			tempposition = position;
+			while (getNextKeyword(words,position) != "null"&&tempposition!=-1)
+			{
+				cout<< "next keyword is "<<getNextKeyword(words,tempposition)<<" at "<<getKeywordPosition(words, getNextKeyword(words,tempposition))<<"\n";
+				tempkeyword.push_back(getNextKeyword(words,tempposition));
+				tempposition = getKeywordPosition(words, getNextKeyword(words,tempposition));
+			}
+			for (int i = tempkeyword.size()-1;i>-1; i--)
+			{
+				switch(getKeyNum(tempkeyword[i])) //"select","project","rename"
+				{
+				case 8: cout<<"dealing with a selection \n";
+					break;
+				case 9:cout<<"dealing with a projection \n";
+					break;
+				case 10:cout<<"dealing with a renaming \n";
+					break;
+				default: cout << "Null keyword\n";
+					break;
+				}
+			}
+
+		break;
+	
+	
+	case 8: cout<<"dealt with a selection \n";
+					break;
+	case 9:cout<<"dealt with a projection \n";
+					break;
+	case 10:cout<<"dealt with a renaming \n";
+					break;
+
+
+
 	default: cout << "how did that happen?\n";
 		break;
 	}
@@ -191,6 +230,48 @@ bool Parser::isname(string name)
 			return 1;
 	}
 	return 0;
+}
+string Parser::getNextKeyword(vector<string> words, int position)
+{
+	string keyword= "null";
+	for(int i=position+1; i<words.size();i++)
+	{
+		for (int j = 0; j< keywords.size(); j++)
+		{
+			if (words[i] == keywords[j])
+			{
+				keyword = words[i];
+				return keyword;
+			}
+		}
+	}
+	return keyword;
+}
+int Parser::getKeywordPosition(vector<string> words, string keyword)
+{
+	int position = -1;
+	for(int i=0; i<words.size();i++)
+	{
+			if (words[i] == keyword)
+			{
+				position = i;
+				return position;
+			}
+	}
+	return position;
+}
+int Parser::getKeyNum(string keyword)
+{
+	int position = -1;
+	for(int i=0; i<keywords.size();i++)
+	{
+			if (keywords[i] == keyword)
+			{
+				position = i;
+				return position;
+			}
+	}
+	return position;
 }
 
 
