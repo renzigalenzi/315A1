@@ -42,7 +42,13 @@ void Parser::execute(string s){
 	vector<string> words;
 	string temp = "";
 	int counter = -1;
-	//cout<<s.size();
+	int keywordsFound=0;
+	//cout<<s.size()<<"\n";
+	if (s.size()>=1&&*s.rbegin()!=';')
+	{
+    cout<<"ERROR: not a valid line, please use a ; so signal the end of a statement\n";
+	return;
+	}
 	for(int i = 0; i<s.size(); i++)
 	{		
       if(isspace(s[i])||s[i]==';')
@@ -76,11 +82,13 @@ void Parser::execute(string s){
 		{
 			if (words[i] == keywords[j])
 			{
-				//cout<<"\nkeyword found! - "<<keywords[j]<<"\n";
+				keywordsFound++;//cout<<"\nkeyword found! - "<<keywords[j]<<"\n";
 				callFunction(j, i, words);// call function dothis(keyword[j], i//-we will need the words that follow the keyword so keeping position is important)
 			}
 		}
 	}
+	if (keywordsFound==0)
+		cout<<"Not a valid line.\n";
 }
 
 void Parser::callFunction(int keyword, int position, vector<string> words)
@@ -287,6 +295,18 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	case 9://cout<<"dealt with a projection \n";
 					break;
 	case 10://cout<<"dealt with a renaming \n";
+					break;
+	case 11: cout << "Wrtiting "<< words[position+1]<<" to output file\n";
+		tablename = words[position+1];
+		if (isname(tablename))
+			tablevector[getTable(words[position+1])].display();
+		else
+			cout<<tablename<<" - ERROR:  is not a created table at the moment.\n";
+		break;
+					
+	case 12:cout << "Closing "<< words[position+1]<<" output file\n";
+					break;
+	case 13:cout << "EXITING\n";
 					break;
 
 

@@ -95,7 +95,15 @@ int main()
 		parser.execute(s);
 		
 	}
+	string user;
+	string stringtoparse;
+	while (user!="EXIT;")
+	{
+		cout<<"Please enter a line. To exit, type \"EXIT;\"\n";
+		getline(cin, user);
+		parser.execute(user);
 
+	}
 	system("PAUSE");
 	return 0;
 }
