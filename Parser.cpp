@@ -174,23 +174,35 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		break;
 
 
-	case 7: cout << "<-\n";
+	case 7: cout << "soling for <-\n";
 			tempposition = position;
 			while (getNextKeyword(words,position) != "null"&&tempposition!=-1)
 			{
-				cout<< "next keyword is "<<getNextKeyword(words,tempposition)<<" at "<<getKeywordPosition(words, getNextKeyword(words,tempposition))<<"\n";
-				tempkeyword.push_back(getNextKeyword(words,tempposition));
-				tempposition = getKeywordPosition(words, getNextKeyword(words,tempposition));
+				if (getNextKeyword(words,tempposition)!="null")
+				{
+					cout<< "keywords are/is "<<getNextKeyword(words,tempposition)<<" at "<<getKeywordPosition(words, getNextKeyword(words,tempposition))<<"\n";
+					tempkeyword.push_back(getNextKeyword(words,tempposition));	
+				}tempposition = getKeywordPosition(words, getNextKeyword(words,tempposition));
 			}
+			cout<<"\n";
 			for (int i = tempkeyword.size()-1;i>-1; i--)
 			{
 				switch(getKeyNum(tempkeyword[i])) //"select","project","rename"
 				{
 				case 8: cout<<"dealing with a selection \n";
+						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
+						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
+						cout<<"\n";
 					break;
 				case 9:cout<<"dealing with a projection \n";
+						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
+						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
+						cout<<"\n";
 					break;
 				case 10:cout<<"dealing with a renaming \n";
+						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
+						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
+						cout<<"\n";
 					break;
 				default: cout << "Null keyword\n";
 					break;
@@ -200,11 +212,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		break;
 	
 	
-	case 8: cout<<"dealt with a selection \n";
+	case 8: //cout<<"dealt with a selection \n";
 					break;
-	case 9:cout<<"dealt with a projection \n";
+	case 9://cout<<"dealt with a projection \n";
 					break;
-	case 10:cout<<"dealt with a renaming \n";
+	case 10://cout<<"dealt with a renaming \n";
 					break;
 
 
@@ -231,6 +243,7 @@ bool Parser::isname(string name)
 	}
 	return 0;
 }
+
 string Parser::getNextKeyword(vector<string> words, int position)
 {
 	string keyword= "null";
@@ -273,6 +286,36 @@ int Parser::getKeyNum(string keyword)
 	}
 	return position;
 }
-
-
+string Parser::getElementString(vector<string> words, int position, int elementNumber)
+{
+	string returnString;
+	int parenthesis = 0;
+	int element=-1;
+	for(int i=position; i<words.size();i++)
+	{
+		if (words[i] == "(")
+			{
+				if (parenthesis==0)
+				{element++;}
+				parenthesis++;
+			}
+		else if(words[i] == ")")
+			{
+				if (parenthesis==0)
+				{element++;}
+				parenthesis--;
+				
+			}
+		else if(words[i] != "(" && words[i] != ")" && words[i] != ""&& parenthesis ==0)
+			{
+				element ++;
+				//cout<<"new element "<<element<<" starts with - "<<words[i]<<"\n";
+			}
+		if(element==elementNumber)
+			{
+				returnString+=words[i];
+			}
+	}
+	return returnString;
+}
 

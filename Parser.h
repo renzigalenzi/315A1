@@ -34,6 +34,7 @@ public:
 	string getNextKeyword(vector<string> words, int position);
 	int getKeywordPosition(vector<string> words, string keyword);
 	int getKeyNum(string keyword);
+	string getElementString(vector<string> words, int position, int elementNumber);
 };
 
 
