@@ -44,12 +44,12 @@ void Parser::execute(string s){
 	int counter = -1;
 	int keywordsFound=0;
 	//cout<<s.size()<<"\n";
-	if (s.size()>=1&&*s.rbegin()!=';')
+	if (s.size()>=1&&*s.rbegin()!=';')// line doesnt end with a ;
 	{
     cout<<"ERROR: not a valid line, please use a ; so signal the end of a statement\n";
 	return;
 	}
-	for(int i = 0; i<s.size(); i++)
+	for(int i = 0; i<s.size(); i++)// find all ; and spaces and doesnt count them as words.
 	{		
       if(isspace(s[i])||s[i]==';')
       {
@@ -58,7 +58,7 @@ void Parser::execute(string s){
 		  temp = "";
 		  //cout<< words[counter]<< " ";
       }
-	  else if (s[i]==')' || s[i]=='(' || s[i]==',')
+	  else if (s[i]==')' || s[i]=='(' || s[i]==',') // ends a word if one of these symbols comes up
 		{
 			if (temp.size()>0)
 			{
@@ -66,17 +66,17 @@ void Parser::execute(string s){
 				words.push_back(temp);
 				//cout<< words[counter]<< " ";
 			}
-			temp = s[i];
+			temp = s[i];                          //proceeds to then add the symbol by itself as a word.
 			words.push_back(temp);
 			counter ++;
 			//cout<< words[counter]<< " ";
 			temp = "";
 		}
 	  else
-		  temp += s[i];
+		  temp += s[i]; // add any words to the sentence
 	  
 	}
-	for (int i = 0; i< words.size(); i++)
+	for (int i = 0; i< words.size(); i++) // go through all the words and find any keywords. then execute them.
 	{
 		for (int j = 0; j< keywords.size(); j++)
 		{
@@ -108,12 +108,12 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	{
 	case 0: 
 		validity = 4;
-		if (!valid(validity,words,position))
+		if (!valid(validity,words,position)) // if there isnt enough information provided, the create will not work.
 		{
 		cout<< "ERROR: not a valid statement, needs 2 arguments with parenthesis\n";
 		break;
 		}
-		cout << "I am creating a table called "<<words[position+2]<< "\n";
+		cout << "I am creating a table called "<<words[position+2]<< "\n"; // all of this is just to visualize what is going on, the work is done later
 			tablename = words[position+2];
 			if (words[position+3]=="(")
 				cout<< "setting Columns to - \n";
@@ -124,7 +124,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			}
 				cout<< "Column "<<columnCounter<<" = "<<words[position+4]<<"\n";
 				columnnames.push_back(words[position+4]);
-			for (int i = position+2; i<words.size(); i++)
+			for (int i = position+2; i<words.size(); i++) // continue to intake column headers until there is a stopping point.
 			{
 				if (words[i]=="PRIMARY")
 				{
@@ -137,14 +137,14 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 					columnnames.push_back(words[i+2]);
 				}
 			}
-		tablevector.push_back(DBMS(1,columnCounter+1,tablename));
+		tablevector.push_back(DBMS(1,columnCounter+1,tablename)); // here is where the table is created and edited. 
 		for (int i = 0; i <columnCounter+1; i++)
 		{
 		tablevector[getTable(tablename)].setColumnName(i,columnnames[i]);
 		}
 		//tablevector[getTable(tablename)].display();
 		break;
-	case 1: 
+	case 1:																// INSERT, make sure there is enough information for it, then execute.
 		validity = 2;
 		if (!valid(validity,words,position))
 		{
@@ -160,7 +160,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		}
 		tablevector[getTable(words[position+2])].add();
 		break;
-	case 2: 
+	case 2:																		// VARCHAR, make sure there is enough information for it (really just for show).
 		validity = 2;
 		if (!valid(validity,words,position))
 		{
@@ -170,11 +170,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		
 		cout << "char value with "<<words[position+2]<<" characters will be possible in items within table.getColumn("<<words[position-1]<<")\n";
 		break;
-	case 3: 
+	case 3:																	// INTEGER, make sure there is enough information for it (really just for show).
 
 		cout << "int value at table.getColumn("<<words[position-1]<<")\n";
 		break;
-	case 4:
+	case 4:																		// VALUES, make sure there is enough information for it, then apply values according to order.
 		validity = 3;
 		if (!valid(validity,words,position))
 		{
@@ -186,11 +186,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		/**/		break;
 			columnCounter=0;
 			cout<< "\nSetting attribute "<<columnCounter<<" to "<<words[position+3]<<"\n";
-			tablevector[getTable(words[position-1])].changeValue(tablevector[getTable(words[position-1])].getLastRow(),columnCounter,words[position+3]);
+			tablevector[getTable(words[position-1])].changeValue(tablevector[getTable(words[position-1])].getLastRow(),columnCounter,words[position+3]); //apply the first column info
 			for (int i = position+2; i<words.size(); i++)
 			{
-				if (words[i]==",")
-				{	
+				if (words[i]==",")// if there are any more columns to add, then add them
+				{		
 					columnCounter++;
 					cout<< "Setting attribute "<<columnCounter<<" to "<<words[i+2]<<"\n";
 					tablevector[getTable(words[position-1])].changeValue(tablevector[getTable(words[position-1])].getLastRow(),columnCounter,words[i+2]);
@@ -199,7 +199,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			} 
 			//tablevector[0].display();
 		break;
-	case 5:
+	case 5:																		// RELATION, check for validity, execute.
 		validity = 3;
 		if (!valid(validity,words,position))
 		{
@@ -216,7 +216,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		tablename2=words[position-3];
 		column = words[position+3];
 		cout<<"\nfor "<<tablename<<" "<<tablevector[getTable(tablename)].getRows()<<",  -  "<<tablename2<<" . add()\n";
-		for (int i=1; i<tablevector[getTable(tablename)].getRows(); i++)
+		for (int i=1; i<tablevector[getTable(tablename)].getRows(); i++) // add new rows to the table being created, then fill the row with the information desired.
 		{
 			tablevector[getTable(tablename2)].add();
 			tablevector[getTable(tablename2)].changeValue(tablevector[getTable(tablename2)].getLastRow(),tablevector[getTable(tablename2)].getColumn(column)
@@ -225,7 +225,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		tablevector[getTable(tablename)].display();
 		tablevector[getTable(tablename2)].display();
 		break;
-	case 6: cout << "displaying "<< words[position+1]<<"\n";
+	case 6: cout << "displaying "<< words[position+1]<<"\n";						//SHOW, shows the table if it exists.
 		tablename = words[position+1];
 		if (isname(tablename))
 			tablevector[getTable(words[position+1])].display();
@@ -234,11 +234,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		break;
 
 
-	case 7: cout << "solving for <-\n";
-			tempposition = position;
-			while (getNextKeyword(words,position) != "null"&&tempposition!=-1)
-			{
-				if (getNextKeyword(words,tempposition)!="null")
+	case 7: cout << "solving for <-\n";												//<- this one is really rough, but basically it knows there has to be an INSTRUCTION on the right side of the <-
+			tempposition = position;												//so it goes through and finds all instructions, which have 2 elements to them, the LIMITER, and TABLE reference.
+			while (getNextKeyword(words,position) != "null"&&tempposition!=-1)		//then it executes the command and becomes a new TABLE reference itself, so that any prior commands can be executed using its new information
+			{																		// INSTRUCTION (LIMITER) (INSTRUCTION (LIMITER) (TABLE)) -becomes- INSTRUCTION (LIMITER) (NEWTABLE) -becomes- NEWTABLE
+				if (getNextKeyword(words,tempposition)!="null")						// the final table is copies over to the left of the "<-"
 				{
 					cout<< "keywords are/is "<<getNextKeyword(words,tempposition)<<" at "<<getKeywordPosition(words, getNextKeyword(words,tempposition))<<"\n";
 					tempkeyword.push_back(getNextKeyword(words,tempposition));	
@@ -296,7 +296,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 					break;
 	case 10://cout<<"dealt with a renaming \n";
 					break;
-	case 11: cout << "Wrtiting "<< words[position+1]<<" to output file\n";
+	case 11: cout << "Wrtiting "<< words[position+1]<<" to output file\n";					//WRITE
 		tablename = words[position+1];
 		if (isname(tablename))
 			tablevector[getTable(words[position+1])].display();
@@ -304,9 +304,9 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			cout<<tablename<<" - ERROR:  is not a created table at the moment.\n";
 		break;
 					
-	case 12:cout << "Closing "<< words[position+1]<<" output file\n";
+	case 12:cout << "Closing "<< words[position+1]<<" output file\n";						//CLOSE
 					break;
-	case 13:cout << "EXITING\n";
+	case 13:cout << "EXITING\n";															//EXIT
 					break;
 
 
