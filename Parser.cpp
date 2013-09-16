@@ -91,6 +91,8 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	string tablename;
 	string tablename2;
 	string column;
+
+	//     starting with case 0: -  "CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW"
 	switch(keyword)
 	{
 	case 0: 
