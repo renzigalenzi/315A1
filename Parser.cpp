@@ -93,17 +93,27 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	string column;
 	int tempposition;
 	vector<string> tempkeyword;
+	int validity;
 
 	//     starting with case 0: -  "CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW","<-","select","project","rename"
 	switch(keyword)
 	{
 	case 0: 
-
-		
+		validity = 4;
+		if (!valid(validity,words,position))
+		{
+		cout<< "ERROR: not a valid statement, needs 2 arguments with parenthesis\n";
+		break;
+		}
 		cout << "I am creating a table called "<<words[position+2]<< "\n";
 			tablename = words[position+2];
 			if (words[position+3]=="(")
 				cout<< "setting Columns to - \n";
+			else
+			{
+				cout<<"ERROR: not a valid statement\n";
+				break;
+			}
 				cout<< "Column "<<columnCounter<<" = "<<words[position+4]<<"\n";
 				columnnames.push_back(words[position+4]);
 			for (int i = position+2; i<words.size(); i++)
@@ -126,14 +136,45 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		}
 		//tablevector[getTable(tablename)].display();
 		break;
-	case 1: cout << "\nInserting element into table "<<words[position+2]<<"\n";
+	case 1: 
+		validity = 2;
+		if (!valid(validity,words,position))
+		{
+		cout<< "ERROR: not a valid statement, needs 2 arguments with parenthesis\n";
+		break;
+		}
+
+		cout << "\nInserting element into table "<<words[position+2]<<"\n";
+		if (!isname(words[position+2]))
+		{
+			cout<<tablename<<" - ERROR: is not a created table at the moment.\n";
+			break;
+		}
 		tablevector[getTable(words[position+2])].add();
 		break;
-	case 2: cout << "char value with "<<words[position+2]<<" characters will be possible in items within table.getColumn("<<words[position-1]<<")\n";
+	case 2: 
+		validity = 2;
+		if (!valid(validity,words,position))
+		{
+		cout<< "ERROR: not a valid statement, needs 1 argument \"tablename\"\n";
 		break;
-	case 3: cout << "int value at table.getColumn("<<words[position-1]<<")\n";
+		}
+		
+		cout << "char value with "<<words[position+2]<<" characters will be possible in items within table.getColumn("<<words[position-1]<<")\n";
 		break;
-	case 4:	if (words[position+2]=="RELATION")
+	case 3: 
+
+		cout << "int value at table.getColumn("<<words[position-1]<<")\n";
+		break;
+	case 4:
+		validity = 3;
+		if (!valid(validity,words,position))
+		{
+		cout<< "ERROR: not a valid statement, needs at least one value to add\n";
+		break;
+		}
+		
+		if (words[position+2]=="RELATION")
 		/**/		break;
 			columnCounter=0;
 			cout<< "\nSetting attribute "<<columnCounter<<" to "<<words[position+3]<<"\n";
@@ -150,9 +191,20 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			} 
 			//tablevector[0].display();
 		break;
-	case 5: 
+	case 5:
+		validity = 3;
+		if (!valid(validity,words,position))
+		{
+		cout<< "ERROR: not a valid statement, needs at least one comparitor\n";
+		break;
+		}
 		columnCounter=0;
 		tablename=words[words.size()-1];
+		if (!isname(tablename))
+		{
+			cout<<tablename<<" - ERROR: is not a created table at the moment.\n";
+			break;
+		}
 		tablename2=words[position-3];
 		column = words[position+3];
 		cout<<"\nfor "<<tablename<<" "<<tablevector[getTable(tablename)].getRows()<<",  -  "<<tablename2<<" . add()\n";
@@ -170,11 +222,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		if (isname(tablename))
 			tablevector[getTable(words[position+1])].display();
 		else
-			cout<<tablename<<" is not a created table at the moment.\n";
+			cout<<tablename<<" - ERROR:  is not a created table at the moment.\n";
 		break;
 
 
-	case 7: cout << "soling for <-\n";
+	case 7: cout << "solving for <-\n";
 			tempposition = position;
 			while (getNextKeyword(words,position) != "null"&&tempposition!=-1)
 			{
@@ -193,16 +245,34 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
 						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
 						cout<<"\n";
+						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
+							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
+						{
+							cout<< "ERROR: not a valid statement, needs 2 arguments\n";
+							break;
+						}
 					break;
 				case 9:cout<<"dealing with a projection \n";
 						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
 						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
 						cout<<"\n";
+						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
+							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
+						{
+							cout<< "ERROR: not a valid statement, needs 2 arguments\n";
+							break;
+						}
 					break;
 				case 10:cout<<"dealing with a renaming \n";
 						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
 						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
 						cout<<"\n";
+						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
+							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
+						{
+							cout<< "ERROR: not a valid statement, needs 2 arguments\n";
+							break;
+						}
 					break;
 				default: cout << "Null keyword\n";
 					break;
@@ -317,5 +387,17 @@ string Parser::getElementString(vector<string> words, int position, int elementN
 			}
 	}
 	return returnString;
+}
+bool Parser::valid(int length, vector<string> words, int position)
+{
+	int whatsLeft=words.size()-position;
+	if (whatsLeft<length)
+	{
+		cout<<whatsLeft<<" " <<length<<"\n";
+		return false;
+	}
+		
+	else 
+		return true;
 }
 

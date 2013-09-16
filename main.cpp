@@ -22,7 +22,7 @@ using namespace std;
 
 int main()
 {
-	int NumColumns=5;
+	/*int NumColumns=5;
 	int NumRows=5;
 	DBMS m(NumRows, NumColumns,"Original");
 	m.fill();
@@ -84,15 +84,16 @@ int main()
 	vector<vector<string> > crossend;
 	crossend = cross1.crossproduct(cross2.getDBMS());
 	DBMS crossfinal(crossend, "Cross 1 X Cross 2");
-	crossfinal.display();
+	crossfinal.display();*/
 	
 	//checking read file
 	Parser parser;
 	cout << "reading from file" << endl;
 	vector<string> stuff = parser.readfromfile("table");
 	for each (string s in stuff) {
+		cout <<"\nPARSING:: \n"<< s << "\n\n";
 		parser.execute(s);
-		//cout << s << endl;
+		
 	}
 
 	system("PAUSE");
