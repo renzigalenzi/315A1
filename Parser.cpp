@@ -306,7 +306,9 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 					
 	case 12:cout << "Closing "<< words[position+1]<<" output file\n";						//CLOSE
 					break;
-	case 13:cout << "EXITING\n";															//EXIT
+	case 13:cout << "EXITING\n";
+			system("PAUSE");
+			exit(0);//EXIT
 					break;
 
 

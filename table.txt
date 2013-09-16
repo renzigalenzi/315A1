@@ -30,4 +30,3 @@ SHOW answer;
 WRITE animals;
 CLOSE animals;
 
-EXIT;
