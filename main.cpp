@@ -84,8 +84,8 @@ int main()
 	vector<vector<string> > crossend;
 	crossend = cross1.crossproduct(cross2.getDBMS());
 	DBMS crossfinal(crossend, "Cross 1 X Cross 2");
-	crossfinal.display();*/
-	
+	crossfinal.display();
+	*/
 	//checking read file
 	Parser parser;
 	cout << "reading from file" << endl;

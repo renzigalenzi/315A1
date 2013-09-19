@@ -233,6 +233,13 @@ void DBMS::deleteRow(int n)
 	}
 	cout<<"row "<<n<<" deleted.\n";
 }
+void DBMS::clear()
+{
+	while(vec.size()>0)
+	{
+	vec.erase(vec.begin());
+	}
+}
 void DBMS::deleteAttr(int n,string attr)
 {
 	for (int i = 0; i< vec.size(); i++)
@@ -256,6 +263,7 @@ void DBMS::deleteColumn(int n)
 	}
 	cout<<"column "<<n<<" deleted.\n";
 }
+
 void DBMS::show(string Colname, string comparitor){
 	cout<<"finding elements of column \""<<Colname<<"\" with type \""<< comparitor<<"\".\n";
 	int keyColumn = -1;

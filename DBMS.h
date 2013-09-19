@@ -92,6 +92,7 @@ public:
 	}
 	
 	void show(string Colname, string comparitor);
+	void clear();
 	void add(){
 		vec.push_back(vector<string>(columns));
 	}

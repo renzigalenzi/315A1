@@ -21,7 +21,7 @@ class Parser {
 	vector<DBMS> tablevector; //something like this? - yeah, I am not sure quite yet if we should instantiate here or in DBMS with a function call.
 	vector<string> keywords;
 	vector<DBMS> tempvector;
-
+	vector<string> columnnames;
 
 public:
 	Parser() {
@@ -38,7 +38,12 @@ public:
 	int getKeyNum(string keyword);
 	string getElementString(vector<string> words, int position, int elementNumber);
 	string solveElementString(vector<string> words, int position, int elementNumber);
+	void rename(vector<string> words, int position, DBMS vec);
 	bool valid(int length,vector<string> words, int position);
+	int StringToNumber( const string &Text );
+	vector<string> replaceWords(vector<string> words,int begin, int end,string replacement);
+	void copy(DBMS vec1,DBMS vec2);
+	void combineTables(vector<string> words, int position);
 };
 
 

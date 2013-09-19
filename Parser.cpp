@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 
 using namespace std;
@@ -95,9 +96,9 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 {	
 	int tablecolumns = 0;
 	int columnCounter = 0;
-	vector<string> columnnames;
 	string tablename;
 	string tablename2;
+	bool isStatement=true;
 	string column;
 	int tempposition;
 	vector<string> tempkeyword;
@@ -266,33 +267,59 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
 							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
 						{
+							isStatement=false;
 							cout<< "ERROR: not a valid statement, needs 2 arguments\n";
 							break;
 						}
-						/*tablename="tempvector";
+						tablename="tempvector";
 						if(!isname("tempvector"))
 						{
 						tablevector.push_back(DBMS(tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))]));
 						tablevector[tablevector.size()-1].setTitle(tablename);
 						}
 						else
-						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))];
-
-						tablevector[getTable("tempvector")].display();
-						*/
+						{
+						cout<<"going into the table names\n";
+						tablename=solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2);
+						tablevector[getTable("tempvector")].clear();
+						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
+						cout<<"made it past the table names\n";
+						}
+						cout<<solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
+						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
+						cout<<"where do we go now?\n";
+						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
+						
 						//tempvector = solve(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1),solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))
 					break;
+
+
 				case 9:cout<<"dealing with a projection \n";
 						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
 						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
 						cout<<"\n";
 						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
 							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
-						{
+							{
 							cout<< "ERROR: not a valid statement, needs 2 arguments\n";
 							break;
+							}
+						tablename="tempvector";
+						columnnames.clear();
+						if(!isname("tempvector"))
+						{
+						tablevector.push_back(DBMS(tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))]));
+						tablevector[tablevector.size()-1].setTitle(tablename);
 						}
+						else
+						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
+						
+						tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))].display();
+						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2));
 					break;
+
+
+
 				case 10:cout<<"dealing with a renaming \n";
 						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
 						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
@@ -303,12 +330,36 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 							cout<< "ERROR: not a valid statement, needs 2 arguments\n";
 							break;
 						}
+						tablename="tempvector";
+						if(!isname("tempvector"))
+						{
+						tablevector.push_back(DBMS(tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))]));
+						tablevector[tablevector.size()-1].setTitle(tablename);
+						}
+						else
+						{
+						cout<<"going into the table names\n";
+						tablename=solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2);
+						//tablevector[getTable("tempvector")].clear();
+						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
+						cout<<"made it past the table names\n";
+						}
+						rename(words,getKeywordPosition(words, tempkeyword[i]),tablevector[getTable("tempvector")]);
+						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
+						cout<<"where do we go now?\n";
+						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
 					break;
 				default: cout << "Null keyword\n";
 					break;
 				}
 			}
-
+			if(isStatement)
+			{
+			combineTables(words,position);
+			tablevector.push_back(DBMS(tablevector[getTable("tempvector")]));
+			tablevector[tablevector.size()-1].setTitle(words[position-1]);
+			tablevector[getTable(words[position-1])].display();
+			}
 		break;
 	
 	
@@ -435,8 +486,159 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 {
 	vector<string> expression;
 	string returnString;
+	string tablename = " ";
 	int parenthesis = 0;
 	int element=-1;
+	int rows;
+	for(int i=position; i<words.size();i++)
+	{
+		if (words[i] == "(")
+			{
+				if (parenthesis==0)
+				{element++;}
+				parenthesis++;
+			}
+		else if(words[i] == ")")
+			{
+				if (parenthesis==0)
+				{element++;}
+				parenthesis--;
+				
+			}
+		else if(words[i] != "(" && words[i] != ")" && words[i] != ""&& parenthesis ==0)
+			{
+				element ++;
+				//cout<<"new element "<<element<<" starts with - "<<words[i]<<"\n";
+			}
+		if(element==elementNumber)
+			{
+				expression.push_back(words[i]);
+			}
+		if (elementNumber==1&&element ==2)
+		{
+			tablename=words[i];
+			cout<<"tablename = "<<tablename<<"\n";
+		}
+
+	}
+	switch(elementNumber)
+	{
+	case 1:
+		rows=tablevector[getTable("tempvector")].getRows()-1;
+		for (int i=0; i<expression.size(); i++)
+		{
+			if (expression[i]=="("||expression[i]==")")
+			{
+			expression[i].erase();
+			}
+				
+			else if(expression[i]=="==")
+			{
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=expression[i+1])
+					{
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+			}
+			else if(expression[i]==",")
+			{
+				bool check1 = false;
+				bool check2 = false;
+				cout<<expression[i+2]<<"- I2\n";
+				for (int j=0; j<columnnames.size(); j++)
+				{
+					cout<<columnnames[j]<<"\n";
+					if (columnnames[j]==expression[i-1])
+						check1=true;
+					if (columnnames[j]==expression[i+2])
+						check2=true;
+				}
+				if (check1==false)
+				{columnnames.push_back(expression[i-1]);cout<<expression[i-1]<<" is I1\n";}
+				if (check2==false)
+					{columnnames.push_back(expression[i+2]);cout<<expression[i+2]<<" is I2\n";}
+			}
+			else if(expression[i]==">"&&tablevector[getTable("tempvector")].getColumn(expression[i-1])!=-1)
+			{
+				cout<<"made it here\n";
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
+					int n2=StringToNumber(expression[i+1]);
+					if(n1<=n2)
+					{
+						cout<<"deleted row due to >\n";
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+			}
+			else if(expression[i]=="<")
+			{
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
+					int n2=StringToNumber(expression[i+1]);
+					if(n1>=n2)
+					{
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+			}
+		}
+		returnString="tempvector";
+		break;
+	case 2:
+		for (int i=0; i<expression.size(); i++)
+		{
+			if (expression[i]=="("||expression[i]==")")
+				expression[i].erase();
+			else if(expression[i]=="*")
+			{
+				//copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].crossproduct(tablevector[getTable(words[i-1])].getDBMS()));
+				tablevector[getTable("tempvector")].clear();
+				copy(tablevector[getTable("tempvector")],tablevector[getTable(expression[i-1])]);
+				tablevector[getTable("tempvector")].crossproduct(tablevector[getTable(expression[i+1])].getDBMS());
+				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+			}
+			
+		}
+		cout<<expression[0]<<" done with expr 2\n";
+		returnString=expression[0];
+		break;
+	default :
+		break;
+	}
+	return returnString;
+}
+void Parser::rename(vector<string> words, int position, DBMS vec)
+{
+	vector<string> expression;
+	string returnString;
+	string tablename = " ";
+	int parenthesis = 0;
+	int element=-1;
+	int elementNumber=1;
+	int rows;
 	for(int i=position; i<words.size();i++)
 	{
 		if (words[i] == "(")
@@ -462,21 +664,28 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				expression.push_back(words[i]);
 			}
 	}
-	switch(elementNumber)
-	{
-	case 1:
-		break;
-	case 2:
-		for (int i=0; i<expression.size(); i++)
+	int counter=0;
+	for (int i=0; i<expression.size(); i++)
 		{
 			if (expression[i]=="("||expression[i]==")")
-				expression[i].erase();
-			else if(expression[i]=="*")
-				tablevector[getTable(expression[i-1])].setunion(tablevector[getTable(expression[i+1])].getDBMS());
+			{
+			expression[i].erase();
+			}
+			else if(expression[i]==",")
+			{
+				if(counter==0)
+				{
+					vec.setColumnName(vec.getColumn(columnnames[counter]),expression[i-1]);
+					counter++;
+				}
+				if(counter>0)
+				{
+					vec.setColumnName(vec.getColumn(columnnames[counter]),expression[i+2]);
+					counter++;
+				}
+			}
 		}
-		break;
-	}
-	return returnString;
+	copy(tablevector[getTable("tempvector")],vec);
 }
 bool Parser::valid(int length, vector<string> words, int position)
 {
@@ -490,4 +699,72 @@ bool Parser::valid(int length, vector<string> words, int position)
 	else 
 		return true;
 }
-
+void Parser::copy(DBMS vec1,DBMS vec2)
+{
+	for (unsigned i = 0; i < vec2.getRows(); ++i)
+	{
+		tablevector[getTable("tempvector")].add();
+		for (unsigned j = 0; j < vec2.getColumns(); ++j)
+		{
+			tablevector[getTable("tempvector")].changeValue(i,j,vec2.getElement(i,j));
+		}
+	}
+	//cout<<"column "<<n<<" deleted.\n";
+}
+vector<string> Parser::replaceWords(vector<string> words,int begin, int end,string replacement)
+{
+	for(int i=end-1; i>=begin; i--)
+	{
+		words[i].erase();
+	}
+	words[begin-1]=(replacement);
+	return words;
+}
+void Parser::combineTables(vector<string> words, int position)
+{
+	int counter=0;
+	for (int i=0; i<words.size(); i++)
+	{
+		cout<<words[i];
+	}
+	cout<<"\n";
+	for (int i=position; i<words.size(); i++)
+	{
+		if (words[i]=="("||words[i]==")")
+				words[i].erase();
+		cout<<words[i];
+	}
+	for (int i=words.size()-1; i>=position; i--)
+		{	
+			cout<< words[i]<<"hi"<<i<<"\n";
+			if (words[i]=="("||words[i]==")")
+				words[i].erase();
+			else if(words[i]=="+"||words[i]=="-"||words[i]=="*")
+			{
+				
+				if (words[i+1]=="tempvector")
+				{
+				tablevector[getTable("tempvector")].display();
+				tablevector[getTable(words[i-1])].display();
+				if (words[i]=="+")
+				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].setdifference(tablevector[getTable(words[i-1])].getDBMS()));
+				else if (words[i]=="-")
+				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].setunion(tablevector[getTable(words[i-1])].getDBMS()));
+				else if (words[i]=="*")
+				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].crossproduct(tablevector[getTable(words[i-1])].getDBMS()));
+				words[i-1]="tempvector";
+				words[i].erase();
+				words[i+1].erase();
+				tablevector[getTable("tempvector")].display();
+				
+				}
+			}
+			
+		}
+}
+int Parser::StringToNumber( const string &Text )//Text not by const reference so that the function can be used with a 
+{                               //character array as argument
+	stringstream ss(Text);
+	int result;
+	return ss >> result ? result : 0;
+}
