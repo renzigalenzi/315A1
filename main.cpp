@@ -22,7 +22,7 @@ using namespace std;
 
 int main()
 {
-	/*int NumColumns=5;
+	int NumColumns=5;
 	int NumRows=5;
 	DBMS m(NumRows, NumColumns,"Original");
 	m.fill();
@@ -34,6 +34,7 @@ int main()
 	m.setColumnName(4,"security");
 	m.changeValue(2,3,"changed");
 	m.setTitle("Attributes Added");
+	
 	m.display();
 	m.show("sex", "changed");
 	m.add();
@@ -54,6 +55,8 @@ int main()
 	m.deleteColumn(2);
 	m.setTitle("Column Deleted - Original Final");
 	m.display();
+	m.writeToFile();
+	/*
 	DBMS f(m.getDBMS(),"Second DBMS");
 	f.display();
 	f.changeValue(1,f.getColumn("type"),"0");

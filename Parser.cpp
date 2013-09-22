@@ -24,13 +24,11 @@ vector<string> Parser::readfromfile(string tablename) {
 	string temp;
 	vector<string> toReturn;
 	string filename = tablename + ".db";
-	//cout << "filename is:" << filename << endl;
 	ifstream file;
 	file.open(filename.c_str());
 	if (file.is_open()) {
 		while (!file.eof()){
 			getline(file, temp/*, ';'*/);
-			//cout << "temp = " << temp << endl;
 			toReturn.push_back(temp);
 		}
 	}

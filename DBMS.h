@@ -24,7 +24,7 @@ class DBMS {
 	vector< vector<string> > vec;
 	string title;
 public: 
-	vector<string> ColumnNames;
+	vector<string> ColumnNames; //not used anywhere?
 
    // constructors 
 	
@@ -99,7 +99,7 @@ public:
 	int getLastRow(){
 		return vec.size()-1;
 	}
-  
+	void writeToFile();
 
 };
 

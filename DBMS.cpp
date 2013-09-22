@@ -289,10 +289,40 @@ void DBMS::show(string Colname, string comparitor){
 
 }
 
+void DBMS::writeToFile(){
+	string filename = title + ".db";
+	ofstream file;
+	file.open(filename.c_str());
+	if (file.is_open()){
+		//write creation DML
+		file << "CREATE TABLE " << title << " (";
+		for (int i = 0; i < vec.size() ; i++) { //write column names
+			if (i != (vec.size()-1))
+				file << " " << vec[i][0] << ",";
+			else
+				file << " " << vec[i][0];
+		}
+		file << ");" << endl;
+
+		//write INSERT row DML
+		for (int i = 1; i < vec.size(); i++){
+			file << "INSERT INTO " << title << " VALUES FROM (";
+			for (int j = 0; j < vec[0].size(); j++){
+				if (j != (vec[0].size()-1))
+					file << vec[i][j] << ",";
+				else
+					file << vec[i][j];
+			}
+			file << ");" << endl;
+		}
+	}
+	else cout << "failed to open file for output" << endl;
+}
+
 bool operator==(const DBMS& m1, const DBMS& m2)
 {
 
-return true;
+return true; //LOL
 
 }
 std::ostream& operator<<(ostream& os, const DBMS& m)

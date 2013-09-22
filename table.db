@@ -29,3 +29,6 @@ SHOW answer;
 
 WRITE animals;
 CLOSE animals;
+
+CREATE TABLE newtable (this, that, things);
+SHOW newtable;
