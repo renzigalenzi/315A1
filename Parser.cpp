@@ -590,6 +590,21 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				expression[i+1].erase();
 				i--;
 			}
+		else if(expression[i]=="!=")
+			{
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==expression[i+1])
+					{
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+			}
 		}
 		returnString="tempvector";
 		break;
