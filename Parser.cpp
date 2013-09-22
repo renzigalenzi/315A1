@@ -273,15 +273,21 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						tablename="tempvector";
 						if(!isname("tempvector"))
 						{
-						tablevector.push_back(DBMS(tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))]));
+						tablevector.push_back(DBMS(tablevector[0]));
 						tablevector[tablevector.size()-1].setTitle(tablename);
 						}
-						else
+						tablename="tempvector2";
+						if(!isname("tempvector2"))
 						{
-						tablename=solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2);
-						tablevector[getTable("tempvector")].clear();
-						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
+						tablevector.push_back(DBMS(tablevector[0]));
+						tablevector[tablevector.size()-1].setTitle(tablename);
 						}
+						cout<<"started from the bottom\n";
+						tablename=solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2);
+						//tablevector[getTable("tempvector")].clear();
+						cout<<"now we here - "<<tablename<<"\n";
+						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
+						cout<<"now we here\n";
 						cout<<solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
 						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
 						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
@@ -494,12 +500,19 @@ string Parser::getElementString(vector<string> words, int position, int elementN
 }
 string Parser::solveElementString(vector<string> words, int position, int elementNumber)
 {
+	string tablename="tempvector3";
+	if(!isname(tablename))
+	{
+	tablevector.push_back(DBMS(tablevector[0]));
+	tablevector[tablevector.size()-1].setTitle(tablename);
+	}
 	vector<string> expression;
 	string returnString;
-	string tablename = " ";
+	tablename = " ";
 	int parenthesis = 0;
 	int element=-1;
 	int rows;
+	bool AND = false;
 	for(int i=position; i<words.size();i++)
 	{
 		if (words[i] == "(")
@@ -543,6 +556,8 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				
 			else if(expression[i]=="==")
 			{
+				if (!AND)
+				{
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
 				{
 					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=expression[i+1])
@@ -555,6 +570,27 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				expression[i].erase();
 				expression[i+1].erase();
 				i--;
+				}
+				else
+				{
+				for (int j=1; j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
+				{
+					if(tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i-1]))!=expression[i+1])
+					{
+						tablevector[getTable("tempvector2")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector2";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+				}
+			}
+			else if(expression[i]=="&&")
+			{
+				cout<<"and found\n";
+				AND=true;
 			}
 			else if(expression[i]==",")
 			{
@@ -608,6 +644,8 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			}
 		else if(expression[i]=="!=")
 			{
+				if (!AND)
+				{
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
 				{
 					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==expression[i+1])
@@ -617,6 +655,37 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 					}
 				}
 				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+				}
+				else
+				{
+				for (int j=1; j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
+				{
+					if(tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i-1]))==expression[i+1])
+					{
+						tablevector[getTable("tempvector2")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector2";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+				}
+			}
+		}
+		if (AND)
+		for (int i=0; i<expression.size(); i++)
+		{
+			if(expression[i]=="&&")
+			{
+				tablevector[getTable("tempvector3")].clear();
+				copy(tablevector[getTable("tempvector3")],tablevector[getTable(expression[i-1])]);
+				tablevector[getTable("tempvector3")].setdifference(tablevector[getTable(expression[i+1])].getDBMS());
+				tablevector[getTable(expression[i-1])].setunion(tablevector[getTable(expression[i+1])].getDBMS());
+				tablevector[getTable(expression[i-1])].setdifference(tablevector[getTable("tempvector3")].getDBMS());
 				expression[i].erase();
 				expression[i+1].erase();
 				i--;
@@ -633,12 +702,15 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			{
 				//copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].crossproduct(tablevector[getTable(words[i-1])].getDBMS()));
 				tablevector[getTable("tempvector")].clear();
+				tablevector[getTable("tempvector2")].clear();
 				copy(tablevector[getTable("tempvector")],tablevector[getTable(expression[i-1])]);
-				tablevector[getTable("tempvector")].crossproduct(tablevector[getTable(expression[i+1])].getDBMS());
+				copy(tablevector[getTable("tempvector2")],tablevector[getTable(expression[i+1])]);
 				expression[i-1]="tempvector";
 				expression[i].erase();
 				expression[i+1].erase();
 				i--;
+				returnString="tempvector";
+				return returnString;
 			}
 			
 		}
@@ -722,10 +794,10 @@ void Parser::copy(DBMS vec1,DBMS vec2)
 {
 	for (unsigned i = 0; i < vec2.getRows(); ++i)
 	{
-		tablevector[getTable("tempvector")].add();
+		tablevector[getTable(vec1.getTitle())].add();
 		for (unsigned j = 0; j < vec2.getColumns(); ++j)
 		{
-			tablevector[getTable("tempvector")].changeValue(i,j,vec2.getElement(i,j));
+			tablevector[getTable(vec1.getTitle())].changeValue(i,j,vec2.getElement(i,j));
 		}
 	}
 	//cout<<"column "<<n<<" deleted.\n";
