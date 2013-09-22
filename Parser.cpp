@@ -139,9 +139,10 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		tablevector.push_back(DBMS(1,columnCounter+1,tablename)); // here is where the table is created and edited. 
 		for (int i = 0; i <columnCounter+1; i++)
 		{
-		tablevector[getTable(tablename)].setColumnName(i,columnnames[i]);
+			tablevector[getTable(tablename)].setColumnName(i,columnnames[i]);
 		}
 		//tablevector[getTable(tablename)].display();
+		columnnames.clear();
 		break;
 	case 1:																// INSERT, make sure there is enough information for it, then execute.
 		validity = 2;
@@ -364,7 +365,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	case 11: cout << "Wrtiting "<< words[position+1]<<" to output file\n";					//WRITE
 		tablename = words[position+1];
 		if (isname(tablename))
-			tablevector[getTable(words[position+1])].display();
+			tablevector[getTable(words[position+1])].writeToFile();
 		else
 			cout<<tablename<<" - ERROR:  is not a created table at the moment.\n";
 		break;

@@ -296,11 +296,11 @@ void DBMS::writeToFile(){
 	if (file.is_open()){
 		//write creation DML
 		file << "CREATE TABLE " << title << " (";
-		for (int i = 0; i < vec.size() ; i++) { //write column names
-			if (i != (vec.size()-1))
-				file << " " << vec[i][0] << ",";
+		for (int i = 0; i < vec[0].size() ; i++) { //write column names
+			if (i != (vec[0].size()-1))
+				file << vec[0][i] << ", ";
 			else
-				file << " " << vec[i][0];
+				file << vec[0][i];
 		}
 		file << ");" << endl;
 
@@ -309,7 +309,7 @@ void DBMS::writeToFile(){
 			file << "INSERT INTO " << title << " VALUES FROM (";
 			for (int j = 0; j < vec[0].size(); j++){
 				if (j != (vec[0].size()-1))
-					file << vec[i][j] << ",";
+					file << vec[i][j] << ", ";
 				else
 					file << vec[i][j];
 			}
