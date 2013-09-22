@@ -376,9 +376,26 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			system("PAUSE");
 			exit(0);//EXIT
 					break;
-
-
-
+	case 14: {
+		cout << "opening table " << words[position+1] << endl;
+		tablename = words[position+1];
+		vector<string> vechere;
+		string filename = tablename + ".db";
+		ifstream readfile;
+		readfile.open((filename.c_str()));
+		if (readfile.is_open()) {
+			vechere = readfromfile(tablename);
+			for each (string s in vechere) {
+				if (s.size()>0) {
+					cout <<"\nPARSING:: \n"<< s << "\n\n";
+					execute(s);
+				}
+			}
+		}
+		else
+			cout << " - ERROR: file does not exist" << endl;
+		break;
+		}
 	default: cout << "how did that happen?\n";
 		break;
 	}
