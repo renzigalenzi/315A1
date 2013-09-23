@@ -275,28 +275,20 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						tablename="tempvector";
 						if(!isname("tempvector"))
 						{
-						tablevector.push_back(DBMS(tablevector[0]));
-						tablevector[tablevector.size()-1].setTitle(tablename);
+							tablevector.push_back(DBMS(tablevector[0]));
+							tablevector[tablevector.size()-1].setTitle(tablename);
 						}
 						tablename="tempvector2";
 						if(!isname("tempvector2"))
 						{
-						tablevector.push_back(DBMS(tablevector[0]));
-						tablevector[tablevector.size()-1].setTitle(tablename);
+							tablevector.push_back(DBMS(tablevector[0]));
+							tablevector[tablevector.size()-1].setTitle(tablename);
 						}
-						cout<<"started from the bottom\n";
 						tablename=solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2);
-						//tablevector[getTable("tempvector")].clear();
-						cout<<"now we here - "<<tablename<<"\n";
 						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
-						cout<<"now we here\n";
 						cout<<solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
-						cout<<"now we here\n";
 						tablevector[getTable("tempvector")].display();
-						//tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
 						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
-						
-						//tempvector = solve(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1),solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))
 					break;
 
 
@@ -564,7 +556,6 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				Equals(expression,i);
 				if (expression[i+2]=="&&")
 				{
-					cout<<"and found\n";
 					if (expression[i+4]=="==")
 						doubleExpression(expression,i,1,1);
 					else if (expression[i+4]=="!=")
@@ -631,7 +622,6 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				NotEquals(expression,i);
 				if (expression[i+2]=="&&")
 				{
-					cout<<"and found\n";
 					if (expression[i+4]=="==")
 						doubleExpression(expression,i,2,1);
 					else if (expression[i+4]=="!=")
@@ -828,10 +818,10 @@ void Parser::Equals(vector<string> expression,int i)
 				if(twoTables)
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1&&j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
 				{
-					cout<<"what in the \n";
+					//cout<<"what in the \n";
 					if(twoTables&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i+1]))&&twoTables)
 					{
-						cout<<"this is happening!\n";
+						//cout<<"this is happening!\n";
 						tablevector[getTable("tempvector")].deleteRow(j);
 						tablevector[getTable("tempvector2")].deleteRow(j);
 						j--;
@@ -854,10 +844,10 @@ void Parser::NotEquals(vector<string> expression,int i)
 				if(twoTables)
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1&&j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
 				{
-					cout<<"what in the \n";
+					//cout<<"what in the \n";
 					if(twoTables&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i+1])))
 					{
-						cout<<"this is happening!\n";
+						//cout<<"this is happening!\n";
 						tablevector[getTable("tempvector")].deleteRow(j);
 						tablevector[getTable("tempvector2")].deleteRow(j);
 						j--;
