@@ -22,7 +22,7 @@ using namespace std;
 
 int main()
 {
-	int NumColumns=5;
+	/*int NumColumns=5;
 	int NumRows=5;
 	DBMS m(NumRows, NumColumns,"Original");
 	m.fill();

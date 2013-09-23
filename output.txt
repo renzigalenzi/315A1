@@ -1,184 +1,390 @@
-reading from file
+Please enter a line. To exit, type "EXIT;", To open a .db, type OPEN.
+OPEN table;
+opening table table
 
 PARSING::
-CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY
-KEY (name, kind);
+CREATE convicts name VARCHAR(20), type VARCHAR(8), years INTEGER;
 
-I am creating a table called animals
-setting Columns to -
-Column 0 = name
-Column 1 = kind
-Column 2 = years
+I am creating a table called name
+ERROR: not a valid statement
 char value with 20 characters will be possible in items within table.getColumn(n
 ame)
-char value with 8 characters will be possible in items within table.getColumn(ki
-nd)
+char value with 8 characters will be possible in items within table.getColumn(ty
+pe)
 int value at table.getColumn(years)
 
 PARSING::
-INSERT INTO animals VALUES FROM ("Joe", "cat", 4);
+CREATE TABLE convicts (name VARCHAR(20), type VARCHAR(8), years INTEGER) PRIMARY
+ KEY (name, type);
+
+I am creating a table called convicts
+setting Columns to -
+Column 0 = name
+Column 1 = type
+Column 2 = years
+char value with 20 characters will be possible in items within table.getColumn(n
+ame)
+char value with 8 characters will be possible in items within table.getColumn(ty
+pe)
+int value at table.getColumn(years)
+
+PARSING::
+INSERT INTO convicts VALUES FROM ("Joe", "deathRow", 4);
 
 
-Inserting element into table animals
+Inserting element into table convicts
 
 Setting attribute 0 to "Joe"
-Setting attribute 1 to "cat"
+Setting attribute 1 to "deathRow"
 Setting attribute 2 to 4
 
 PARSING::
-INSERT INTO animals VALUES FROM ("Spot", "dog", 10);
+INSERT INTO convicts VALUES FROM ("Spot", "Naughty", 10);
 
 
-Inserting element into table animals
+Inserting element into table convicts
 
 Setting attribute 0 to "Spot"
-Setting attribute 1 to "dog"
+Setting attribute 1 to "Naughty"
 Setting attribute 2 to 10
 
 PARSING::
-INSERT INTO animals VALUES FROM ("Snoopy", "dog", 3);
+INSERT INTO convicts VALUES FROM ("Snoopy", "Naughty", 3);
 
 
-Inserting element into table animals
+Inserting element into table convicts
 
 Setting attribute 0 to "Snoopy"
-Setting attribute 1 to "dog"
+Setting attribute 1 to "Naughty"
 Setting attribute 2 to 3
 
 PARSING::
-INSERT INTO animals VALUES FROM ("Tweety", "bird", 1);
+INSERT INTO convicts VALUES FROM ("Tweety", "nice", 1);
 
 
-Inserting element into table animals
+Inserting element into table convicts
 
 Setting attribute 0 to "Tweety"
-Setting attribute 1 to "bird"
+Setting attribute 1 to "nice"
 Setting attribute 2 to 1
 
 PARSING::
-INSERT INTO animals VALUES FROM ("Joe", "bird", 2);
+INSERT INTO convicts VALUES FROM ("Joe", "nice", 2);
 
 
-Inserting element into table animals
+Inserting element into table convicts
 
 Setting attribute 0 to "Joe"
-Setting attribute 1 to "bird"
+Setting attribute 1 to "nice"
 Setting attribute 2 to 2
 
 PARSING::
-SHOW animals;
+SHOW convicts;
 
-displaying animals
+displaying convicts
 
-Table name: animals
-name        kind        years
-"Joe"       "cat"       4
-"Spot"      "dog"       10
-"Snoopy"    "dog"       3
-"Tweety"    "bird"      1
-"Joe"       "bird"      2
+Table name: convicts
+name        type        years
+"Joe"       "deathRow"  4
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+"Tweety"    "nice"      1
+"Joe"       "nice"      2
 
 
 PARSING::
-dogs <- select (kind == "dog") animals;
+Naughtys <- select (type == "Naughty");
 
 solving for <-
 keywords are/is select at 2
 
 dealing with a selection
-first element is (kind=="dog")
-second element is animals
+first element is (type=="Naughty")
+second element is
 
+ERROR: not a valid statement, needs 2 arguments
 
 PARSING::
-old_dogs <- select (age > 10) dogs;
+Naughtys <- select (type == "Naughty") convicts;
 
 solving for <-
 keywords are/is select at 2
 
 dealing with a selection
-first element is (age>10)
-second element is dogs
+first element is (type=="Naughty")
+second element is convicts
+
+row 1 deleted.
+row 3 deleted.
+row 3 deleted.
+row 3 deleted.
+row 3 deleted.
+row 3 deleted.
+row 3 deleted.
+row 3 deleted.
+row 3 deleted.
+tempvector
+
+Table name: tempvector
+name        type        years
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+
+Naughtystempvector
+tempvector
+Table name: Naughtys
+name        type        years
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
 
 
 PARSING::
-cats_or_dogs <- dogs + (select (kind == "cat") animals);
+old_Naughtys <- select (years > 9) Naughtys;
+
+solving for <-
+keywords are/is select at 2
+
+dealing with a selection
+first element is (years>9)
+second element is Naughtys
+
+row 2 deleted.
+row 2 deleted.
+row 2 deleted.
+row 2 deleted.
+tempvector
+
+Table name: tempvector
+name        type        years
+"Spot"      "Naughty"   10
+
+old_Naughtystempvector
+tempvector
+Table name: old_Naughtys
+name        type        years
+"Spot"      "Naughty"   10
+
+
+PARSING::
+deathRows_or_Naughtys <- Naughtys + (select ((((((type == "deathRow") convicts);
+
 
 solving for <-
 keywords are/is select at 5
 
 dealing with a selection
-first element is (kind=="cat")
-second element is animals
+first element is ((((((type=="deathRow")convicts)
+second element is
+
+ERROR: not a valid statement, needs 2 arguments
+
+PARSING::
+deathRows_or_Naughtys <- Naughtys + (select (type == "deathRow") convicts);
+
+solving for <-
+keywords are/is select at 5
+
+dealing with a selection
+first element is (type=="deathRow")
+second element is convicts
+
+row 2 deleted.
+row 2 deleted.
+row 2 deleted.
+row 2 deleted.
+row 2 deleted.
+row 2 deleted.
+tempvector
+
+Table name: tempvector
+name        type        years
+"Joe"       "deathRow"  4
+
+deathRows_or_Naughtys<-Naughtys+tempvector
+<-Naughtys+tempvector
+Table name: tempvector
+name        type        years
+"Joe"       "deathRow"  4
+
+
+Table name: Naughtys
+name        type        years
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+
+
+Table name: tempvector
+name        type        years
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+"Joe"       "deathRow"  4
+
+
+
+
+Table name: deathRows_or_Naughtys
+name        type        years
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+"Joe"       "deathRow"  4
+
+
 
 
 PARSING::
-CREATE TABLE species (kind VARCHAR(10)) PRIMARY KEY (kind);
+CREATE TABLE sentence (type VARCHAR(10)) PRIMARY KEY (type);
 
-I am creating a table called species
+I am creating a table called sentence
 setting Columns to -
-Column 0 = kind
-char value with 10 characters will be possible in items within table.getColumn(k
-ind)
+Column 0 = type
+char value with 10 characters will be possible in items within table.getColumn(t
+ype)
 
 PARSING::
-INSERT INTO species VALUES FROM RELATION project (kind) animals;
+INSERT INTO VALUES FROM RELATION project (type);
 
 
-Inserting element into table species
+Inserting element into table VALUES
+ - ERROR: is not a created table at the moment.
+ - ERROR: is not a created table at the moment.
 
-for animals 6,  -  species . add()
-
-Table name: animals
-name        kind        years
-"Joe"       "cat"       4
-"Spot"      "dog"       10
-"Snoopy"    "dog"       3
-"Tweety"    "bird"      1
-"Joe"       "bird"      2
+PARSING::
+INSERT INTO sentence VALUES FROM RELATION project (type) convicts;
 
 
-Table name: species
-kind
+Inserting element into table sentence
 
-"cat"
-"dog"
-"dog"
-"bird"
-"bird"
+for convicts 6,  -  sentence . add()
+
+Table name: convicts
+name        type        years
+"Joe"       "deathRow"  4
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+"Tweety"    "nice"      1
+"Joe"       "nice"      2
+
+
+Table name: sentence
+type
+
+"deathRow"
+"Naughty"
+"Naughty"
+"nice"
+"nice"
 
 
 PARSING::
-a <- rename (aname, akind) (project (name, kind) animals);
+a <- rename (aname, atype, ayears) (project (name, type, years) convicts);
 
 solving for <-
 keywords are/is rename at 2
-keywords are/is project at 11
+keywords are/is project at 14
 
 dealing with a projection
-first element is (name,kind)
-second element is animals
+first element is (name,type,years)
+second element is convicts
+
+
+Table name: convicts
+name        type        years
+"Joe"       "deathRow"  4
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+"Tweety"    "nice"      1
+"Joe"       "nice"      2
 
 dealing with a renaming
-first element is (aname,akind)
-second element is (project(name,kind)animals)
+first element is (aname,atype,ayears)
+second element is convicts
+
+atempvector
+tempvector
+Table name: a
+aname       atype       ayears
+"Joe"       "deathRow"  4
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+"Tweety"    "nice"      1
+"Joe"       "nice"      2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 PARSING::
-common_names <- project (name) (select (aname == name && akind != kind) (a * ani
-mals));
+common_names <- project (name) (select (aname == name && atype != type) (a * con
+victs));
 
 solving for <-
 keywords are/is project at 2
 keywords are/is select at 8
 
 dealing with a selection
-first element is (aname==name&&akind!=kind)
-second element is (a*animals)
+first element is (aname==name&&atype!=type)
+second element is (a*convicts)
+
+
+Table name: tempvector3
+name        type        years
+"Joe"       "nice"      2
+"Joe"       "deathRow"  4
+
+
+
+
+
+tempvector
+
+Table name: tempvector
+name        type        years
+"Joe"       "nice"      2
+"Joe"       "deathRow"  4
+
+
+
+
 
 dealing with a projection
 first element is (name)
-second element is (select(aname==name&&akind!=kind)(a*animals))
+second element is tempvector
+
+
+Table name: tempvector
+name        type        years
+"Joe"       "nice"      2
+"Joe"       "deathRow"  4
+
+
+
+
+
+common_namestempvector
+tempvector
+Table name: common_names
+name        type        years
+"Joe"       "nice"      2
+"Joe"       "deathRow"  4
+
+
+
+
 
 
 PARSING::
@@ -186,29 +392,72 @@ answer <- common_names;
 
 solving for <-
 
+answer<-common_names
+<-common_names
+Table name: answer
+name        type        years
+"Joe"       "nice"      2
+"Joe"       "deathRow"  4
+
+
+
+
+
 
 PARSING::
 SHOW answer;
 
 displaying answer
-answer - ERROR:  is not a created table at the moment.
 
-PARSING::
-WRITE animals;
+Table name: answer
+name        type        years
+"Joe"       "nice"      2
+"Joe"       "deathRow"  4
 
-Wrtiting animals to output file
 
-Table name: animals
-name        kind        years
-"Joe"       "cat"       4
-"Spot"      "dog"       10
-"Snoopy"    "dog"       3
-"Tweety"    "bird"      1
-"Joe"       "bird"      2
+
+
 
 
 PARSING::
-CLOSE animals;
+SHOW convicts;
 
-Closing animals output file
-Please enter a line. To exit, type "EXIT;"
+displaying convicts
+
+Table name: convicts
+name        type        years
+"Joe"       "deathRow"  4
+"Spot"      "Naughty"   10
+"Snoopy"    "Naughty"   3
+"Tweety"    "nice"      1
+"Joe"       "nice"      2
+
+
+PARSING::
+WRITE convicts;
+
+Wrtiting convicts to output file
+
+PARSING::
+CLOSE convicts;
+
+Closing convicts output file
+
+PARSING::
+CREATE TABLE newtable (this, that, things);
+
+I am creating a table called newtable
+setting Columns to -
+Column 0 = this
+Column 1 = that
+Column 2 = things
+
+PARSING::
+SHOW newtable;
+
+displaying newtable
+
+Table name: newtable
+this        that        things
+
+Please enter a line. To exit, type "EXIT;", To open a .db, type OPEN.
