@@ -23,10 +23,11 @@ INSERT INTO species VALUES FROM RELATION project (kind) animals;
 
 a <- rename (aname, akind, ayears) (project (name, kind, years) animals);
 common_names <- project (name) (select (aname == name && akind != kind) (a * animals));
-answer <- a;
+answer <- common_names;
 
 SHOW answer;
 
+SHOW animals;
 WRITE animals;
 CLOSE animals;
 

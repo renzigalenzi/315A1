@@ -39,6 +39,7 @@ vector<string> Parser::readfromfile(string tablename) {
 
 void Parser::execute(string s){
 	vector<string> words;
+	twoTables = false;
 	string temp = "";
 	int counter = -1;
 	int keywordsFound=0;
@@ -121,6 +122,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 				cout<<"ERROR: not a valid statement\n";
 				break;
 			}
+			columnnames.erase(columnnames.begin(),columnnames.end());
 				cout<< "Column "<<columnCounter<<" = "<<words[position+4]<<"\n";
 				columnnames.push_back(words[position+4]);
 			for (int i = position+2; i<words.size(); i++) // continue to intake column headers until there is a stopping point.
@@ -289,7 +291,9 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
 						cout<<"now we here\n";
 						cout<<solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
-						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
+						cout<<"now we here\n";
+						tablevector[getTable("tempvector")].display();
+						//tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
 						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
 						
 						//tempvector = solve(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1),solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))
@@ -510,6 +514,7 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 	string returnString;
 	tablename = " ";
 	int parenthesis = 0;
+	int deleteRange=1;
 	int element=-1;
 	int rows;
 	bool AND = false;
@@ -556,41 +561,20 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				
 			else if(expression[i]=="==")
 			{
-				if (!AND)
+				Equals(expression,i);
+				if (expression[i+2]=="&&")
 				{
-				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
-				{
-					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=expression[i+1])
-					{
-						tablevector[getTable("tempvector")].deleteRow(j);
-						j--;
-					}
+					cout<<"and found\n";
+					if (expression[i+4]=="==")
+						doubleExpression(expression,i,1,1);
+					else if (expression[i+4]=="!=")
+						doubleExpression(expression,i,1,2);
+					deleteRange+=4;
 				}
 				expression[i-1]="tempvector";
-				expression[i].erase();
-				expression[i+1].erase();
+				for (int j=0;j<deleteRange;j++)
+				expression[i+j].erase();
 				i--;
-				}
-				else
-				{
-				for (int j=1; j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
-				{
-					if(tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i-1]))!=expression[i+1])
-					{
-						tablevector[getTable("tempvector2")].deleteRow(j);
-						j--;
-					}
-				}
-				expression[i-1]="tempvector2";
-				expression[i].erase();
-				expression[i+1].erase();
-				i--;
-				}
-			}
-			else if(expression[i]=="&&")
-			{
-				cout<<"and found\n";
-				AND=true;
 			}
 			else if(expression[i]==",")
 			{
@@ -644,53 +628,23 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			}
 		else if(expression[i]=="!=")
 			{
-				if (!AND)
+				NotEquals(expression,i);
+				if (expression[i+2]=="&&")
 				{
-				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
-				{
-					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==expression[i+1])
-					{
-						tablevector[getTable("tempvector")].deleteRow(j);
-						j--;
-					}
+					cout<<"and found\n";
+					if (expression[i+4]=="==")
+						doubleExpression(expression,i,2,1);
+					else if (expression[i+4]=="!=")
+						doubleExpression(expression,i,2,2);
+					deleteRange+=4;
 				}
 				expression[i-1]="tempvector";
-				expression[i].erase();
-				expression[i+1].erase();
-				i--;
-				}
-				else
-				{
-				for (int j=1; j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
-				{
-					if(tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i-1]))==expression[i+1])
-					{
-						tablevector[getTable("tempvector2")].deleteRow(j);
-						j--;
-					}
-				}
-				expression[i-1]="tempvector2";
-				expression[i].erase();
-				expression[i+1].erase();
+				for (int j=0;j<deleteRange;j++)
+				expression[i+j].erase();
 				i--;
 				}
 			}
-		}
-		if (AND)
-		for (int i=0; i<expression.size(); i++)
-		{
-			if(expression[i]=="&&")
-			{
-				tablevector[getTable("tempvector3")].clear();
-				copy(tablevector[getTable("tempvector3")],tablevector[getTable(expression[i-1])]);
-				tablevector[getTable("tempvector3")].setdifference(tablevector[getTable(expression[i+1])].getDBMS());
-				tablevector[getTable(expression[i-1])].setunion(tablevector[getTable(expression[i+1])].getDBMS());
-				tablevector[getTable(expression[i-1])].setdifference(tablevector[getTable("tempvector3")].getDBMS());
-				expression[i].erase();
-				expression[i+1].erase();
-				i--;
-			}
-		}
+
 		returnString="tempvector";
 		break;
 	case 2:
@@ -710,6 +664,7 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				expression[i+1].erase();
 				i--;
 				returnString="tempvector";
+				twoTables=true;
 				return returnString;
 			}
 			
@@ -857,4 +812,113 @@ int Parser::StringToNumber( const string &Text )//Text not by const reference so
 	stringstream ss(Text);
 	int result;
 	return ss >> result ? result : 0;
+}
+
+void Parser::Equals(vector<string> expression,int i)
+{
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=expression[i+1]&&!twoTables)
+					{
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+					
+				}
+				if(twoTables)
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1&&j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
+				{
+					cout<<"what in the \n";
+					if(twoTables&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i+1]))&&twoTables)
+					{
+						cout<<"this is happening!\n";
+						tablevector[getTable("tempvector")].deleteRow(j);
+						tablevector[getTable("tempvector2")].deleteRow(j);
+						j--;
+					}
+				}
+
+}
+
+void Parser::NotEquals(vector<string> expression,int i)
+{
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==expression[i+1]&&!twoTables)
+					{
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+					
+				}
+				if(twoTables)
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1&&j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
+				{
+					cout<<"what in the \n";
+					if(twoTables&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i+1])))
+					{
+						cout<<"this is happening!\n";
+						tablevector[getTable("tempvector")].deleteRow(j);
+						tablevector[getTable("tempvector2")].deleteRow(j);
+						j--;
+					}
+				}
+
+}
+
+void Parser::doubleExpression(vector<string> expression,int i,int first, int second)
+{
+	int columncount=1;
+				tablevector[getTable("tempvector3")].clear();
+				tablevector[getTable("tempvector3")].add();
+				for (int j=0; j<=tablevector[getTable("tempvector2")].getColumns()-1; j++)
+				{
+					tablevector[getTable("tempvector3")].changeValue(0,j,tablevector[getTable("tempvector2")].getElement(0,j));
+				}
+
+				//// One Table being compared
+				if(!twoTables)
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					for (int k=1; k<=tablevector[getTable("tempvector2")].getRows()-1; k++)
+					{
+					if(first==1&&second==2)
+					{
+						if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector")].getElement(k,tablevector[getTable("tempvector")].getColumn(expression[i+1]))
+							&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i+3]))!=tablevector[getTable("tempvector")].getElement(k,tablevector[getTable("tempvector")].getColumn(expression[i+5])))
+						{
+							for (int column=0; column<tablevector[getTable("tempvector")].getColumns(); column++)
+							{
+								tablevector[getTable("tempvector3")].add();
+								tablevector[getTable("tempvector3")].changeValue(columncount,column,tablevector[getTable("tempvector2")].getElement(k,column));
+								
+							}columncount++;
+						}
+					}
+					}
+				}
+				if(twoTables)														//// Two Tables being compared
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					for (int k=1; k<=tablevector[getTable("tempvector2")].getRows()-1; k++)
+					{
+					if(first==1&&second==2)
+					{
+						if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+1]))
+							&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i+3]))!=tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+5])))
+						{
+							for (int column=0; column<tablevector[getTable("tempvector2")].getColumns(); column++)
+							{
+								tablevector[getTable("tempvector3")].add();
+								tablevector[getTable("tempvector3")].changeValue(columncount,column,tablevector[getTable("tempvector2")].getElement(k,column));
+								
+							}columncount++;
+						}
+					}
+					}
+				}
+				tablevector[getTable("tempvector3")].display();
+				tablevector[getTable("tempvector")].clear();
+				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector3")]);
+
 }

@@ -22,6 +22,7 @@ class Parser {
 	vector<string> keywords;
 	vector<DBMS> tempvector;
 	vector<string> columnnames;
+	bool twoTables;
 
 public:
 	Parser() {
@@ -44,6 +45,10 @@ public:
 	vector<string> replaceWords(vector<string> words,int begin, int end,string replacement);
 	void copy(DBMS vec1,DBMS vec2);
 	void combineTables(vector<string> words, int position);
+
+	void Equals(vector<string> expression, int i);
+	void NotEquals(vector<string> expression, int i);
+	void doubleExpression(vector<string> expression, int i,int first, int second);
 };
 
 

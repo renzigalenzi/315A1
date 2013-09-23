@@ -235,10 +235,7 @@ void DBMS::deleteRow(int n)
 }
 void DBMS::clear()
 {
-	while(vec.size()>0)
-	{
-	vec.erase(vec.begin());
-	}
+	vec.erase(vec.begin(),vec.end());
 }
 void DBMS::deleteAttr(int n,string attr)
 {
