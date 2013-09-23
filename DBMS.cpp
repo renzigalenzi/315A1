@@ -302,6 +302,14 @@ void DBMS::writeToFile(){
 		file << ");" << endl;
 
 		//write INSERT row DML
+		/*for (int i = 0; i < vec.size(); i++){
+			for (int j = 0; j < vec.size(); j++){
+				if (vec[i][j]=="")
+				{
+					cout<<"guess what?\n";
+				}
+			}
+		}*/
 		for (int i = 1; i < vec.size(); i++){
 			file << "INSERT INTO " << title << " VALUES FROM (";
 			for (int j = 0; j < vec[0].size(); j++){

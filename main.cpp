@@ -91,7 +91,7 @@ int main()
 	*/
 	//checking read file
 	Parser parser;
-	cout << "reading from file" << endl;
+	/*cout << "reading from file" << endl;
 	vector<string> stuff = parser.readfromfile("table");
 	for each (string s in stuff) {
 		if (s.size()>0)
@@ -100,12 +100,12 @@ int main()
 		parser.execute(s);
 		}
 		
-	}
+	}*/
 	string user;
 	string stringtoparse;
 	while (user!="EXIT;")
 	{
-		cout<<"Please enter a line. To exit, type \"EXIT;\"\n";
+		cout<<"Please enter a line. To exit, type \"EXIT;\", To open a .db, type OPEN.\n";
 		getline(cin, user);
 		parser.execute(user);
 

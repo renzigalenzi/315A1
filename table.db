@@ -1,35 +1,35 @@
-CREATE animals name VARCHAR(20), kind VARCHAR(8), years INTEGER;
-CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);
+CREATE convicts name VARCHAR(20), type VARCHAR(8), years INTEGER;
+CREATE TABLE convicts (name VARCHAR(20), type VARCHAR(8), years INTEGER) PRIMARY KEY (name, type);
 
-INSERT INTO animals VALUES FROM ("Joe", "cat", 4);
-INSERT INTO animals VALUES FROM ("Spot", "dog", 10);
-INSERT INTO animals VALUES FROM ("Snoopy", "dog", 3);
-INSERT INTO animals VALUES FROM ("Tweety", "bird", 1);
-INSERT INTO animals VALUES FROM ("Joe", "bird", 2);
+INSERT INTO convicts VALUES FROM ("Joe", "deathRow", 4);
+INSERT INTO convicts VALUES FROM ("Spot", "Naughty", 10);
+INSERT INTO convicts VALUES FROM ("Snoopy", "Naughty", 3);
+INSERT INTO convicts VALUES FROM ("Tweety", "nice", 1);
+INSERT INTO convicts VALUES FROM ("Joe", "nice", 2);
 
-SHOW animals;
+SHOW convicts;
 
-dogs <- select (kind == "dog");
-dogs <- select (kind == "dog") animals;
-old_dogs <- select (years > 9) dogs;
+Naughtys <- select (type == "Naughty");
+Naughtys <- select (type == "Naughty") convicts;
+old_Naughtys <- select (years > 9) Naughtys;
 
-cats_or_dogs <- dogs + (select ((((((kind == "cat") animals);
-cats_or_dogs <- dogs + (select (kind == "cat") animals);
+deathRows_or_Naughtys <- Naughtys + (select ((((((type == "deathRow") convicts);
+deathRows_or_Naughtys <- Naughtys + (select (type == "deathRow") convicts);
 
-CREATE TABLE species (kind VARCHAR(10)) PRIMARY KEY (kind);
+CREATE TABLE sentence (type VARCHAR(10)) PRIMARY KEY (type);
 
-INSERT INTO VALUES FROM RELATION project (kind);
-INSERT INTO species VALUES FROM RELATION project (kind) animals;
+INSERT INTO VALUES FROM RELATION project (type);
+INSERT INTO sentence VALUES FROM RELATION project (type) convicts;
 
-a <- rename (aname, akind, ayears) (project (name, kind, years) animals);
-common_names <- project (name) (select (aname == name && akind != kind) (a * animals));
+a <- rename (aname, atype, ayears) (project (name, type, years) convicts);
+common_names <- project (name) (select (aname == name && atype != type) (a * convicts));
 answer <- common_names;
 
 SHOW answer;
 
-SHOW animals;
-WRITE animals;
-CLOSE animals;
+SHOW convicts;
+WRITE convicts;
+CLOSE convicts;
 
 CREATE TABLE newtable (this, that, things);
 SHOW newtable;

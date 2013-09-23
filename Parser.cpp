@@ -885,6 +885,19 @@ void Parser::doubleExpression(vector<string> expression,int i,int first, int sec
 							}columncount++;
 						}
 					}
+					if(first==2&&second==1)
+					{
+						if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=tablevector[getTable("tempvector")].getElement(k,tablevector[getTable("tempvector")].getColumn(expression[i+1]))
+							&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i+3]))==tablevector[getTable("tempvector")].getElement(k,tablevector[getTable("tempvector")].getColumn(expression[i+5])))
+						{
+							for (int column=0; column<tablevector[getTable("tempvector")].getColumns(); column++)
+							{
+								tablevector[getTable("tempvector3")].add();
+								tablevector[getTable("tempvector3")].changeValue(columncount,column,tablevector[getTable("tempvector2")].getElement(k,column));
+								
+							}columncount++;
+						}
+					}
 					}
 				}
 				if(twoTables)														//// Two Tables being compared
