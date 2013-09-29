@@ -548,7 +548,15 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			{
 			expression[i].erase();
 			}
-				
+			else if(expression[i]=="+")
+			{
+				copy(tablevector[getTable("tempvector")],tablevector[getTable(expression[i-1])]);
+				tablevector[getTable("tempvector")].setunion(tablevector[getTable(expression[i+1])].getDBMS());
+				expression[i-1]="tempvector";
+				for (int j=0;j<deleteRange;j++)
+				expression[i+j].erase();
+				i--;
+			}	
 			else if(expression[i]=="==")
 			{
 				Equals(expression,i);
@@ -598,6 +606,23 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				expression[i+1].erase();
 				i--;
 			}
+			else if(expression[i]==">="&&tablevector[getTable("tempvector")].getColumn(expression[i-1])!=-1)
+			{
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
+					int n2=StringToNumber(expression[i+1]);
+					if(n1<n2)
+					{
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+			}
 			else if(expression[i]=="<")
 			{
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
@@ -605,6 +630,23 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
 					int n2=StringToNumber(expression[i+1]);
 					if(n1>=n2)
+					{
+						tablevector[getTable("tempvector")].deleteRow(j);
+						j--;
+					}
+				}
+				expression[i-1]="tempvector";
+				expression[i].erase();
+				expression[i+1].erase();
+				i--;
+			}
+		else if(expression[i]=="<=")
+			{
+				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
+				{
+					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
+					int n2=StringToNumber(expression[i+1]);
+					if(n1>n2)
 					{
 						tablevector[getTable("tempvector")].deleteRow(j);
 						j--;
@@ -735,6 +777,7 @@ bool Parser::valid(int length, vector<string> words, int position)
 }
 void Parser::copy(DBMS vec1,DBMS vec2)
 {
+	tablevector[getTable(vec1.getTitle())].clear();
 	for (unsigned i = 0; i < vec2.getRows(); ++i)
 	{
 		tablevector[getTable(vec1.getTitle())].add();
@@ -775,14 +818,24 @@ void Parser::combineTables(vector<string> words, int position)
 			else if(words[i]=="+"||words[i]=="-"||words[i]=="*")
 			{
 				
-				if (words[i+1]=="tempvector")
+				if (words[i+1]!="tempvector")
 				{
+
+				copy(tablevector[getTable("tempvector")],tablevector[getTable(words[i+1])]);
 				tablevector[getTable("tempvector")].display();
 				tablevector[getTable(words[i-1])].display();
-				if (words[i]=="+")
+
+				}
+				if (words[i]=="-")
+				{
 				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].setdifference(tablevector[getTable(words[i-1])].getDBMS()));
-				else if (words[i]=="-")
+				}
+				else if (words[i]=="+")
+				{
+				tablevector[getTable("tempvector")].display();
 				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].setunion(tablevector[getTable(words[i-1])].getDBMS()));
+				tablevector[getTable("tempvector")].display();
+				}
 				else if (words[i]=="*")
 				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].crossproduct(tablevector[getTable(words[i-1])].getDBMS()));
 				words[i-1]="tempvector";
@@ -790,7 +843,7 @@ void Parser::combineTables(vector<string> words, int position)
 				words[i+1].erase();
 				tablevector[getTable("tempvector")].display();
 				
-				}
+				
 			}
 			
 		}

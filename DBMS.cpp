@@ -105,15 +105,19 @@ vector<vector<string> > DBMS::setunion(vector<vector<string> > vec2){
 				if (k==vec[j].size()-1||k==vec2[i].size()-1) // if you get to the end of a compared row and everything is the same, there was a duplicate. so delete it.
 				{
 				resultant=i-offsety;
+				if (vecFinal.size()>resultant)
+				{
 				vecFinal.erase(vecFinal.begin() + resultant);
 				offsety++;
-				//cout<<" no discrepancy in the vectors at - "<<j<<" "<<k<<" offset is now "<<offsety<<"\n";
 				}
+				}
+				cout<<i<<" "<<j<<" "<<k<<"\n";
 			}
 		}
 	}
 	offsety=vecFinal.size();
 	for (int i = 0; i < vec.size(); i++) {// now that the final vector only contains the differences between the first and second vector, add the first vector back in.
+		cout<<"pushing!\n";
 		vecFinal.push_back(vec[i]);
 	}
 	vecFinal.erase(vecFinal.begin() +offsety);
@@ -228,11 +232,13 @@ void DBMS::deleteRow(int n)
 	{
 		vec.erase(vec.begin() + n);
 	}
+	//vec.resize(vec.size()-1);
 	cout<<"row "<<n<<" deleted.\n";
 }
 void DBMS::clear()
 {
 	vec.erase(vec.begin(),vec.end());
+	vec.resize(0);
 }
 void DBMS::deleteAttr(int n,string attr)
 {
