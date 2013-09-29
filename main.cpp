@@ -191,6 +191,7 @@ int main()
 			{
 			vector<colvar> vars;
 			string tname, numvars;
+			bool firstcol =false;
 			cout<<"Enter name of the new table: ";
 			getline(cin, tname);
 			cout<<"Amount of variables: ";
@@ -222,12 +223,19 @@ int main()
 			for (int k = 0; k<=vars.size()-1; k++){
 				cout<<"Variable #"<<k+1<<vars.at(k).getvarname()<<'-'<<vars.at(k).getvartype()<<'-'<<vars.at(k).getvarsize()<<'\n';
 				if (vars.at(k).getvartype() == "string"){ //adds string column with respective size
-					ct_string+=vars.at(k).getvarname()+' '+"VARCHAR("+vars.at(k).getvarsize()+"), ";
+					if (firstcol)
+						ct_string+=", ";
+					ct_string+=vars.at(k).getvarname()+' '+"VARCHAR("+vars.at(k).getvarsize()+")";
+					firstcol=true;
 				} else if (vars.at(k).getvartype() == "integer"){ //adds integer column
-					ct_string+=vars.at(k).getvarname()+' '+"INTEGER, ";
+					if (firstcol)
+						ct_string+=", ";
+					ct_string+=vars.at(k).getvarname()+' '+"INTEGER";
+					firstcol=true;
 				}
 			}
-			ct_string+=');'; //close parsing string
+			ct_string+=");"; //close parsing string
+			cout<<ct_string<<"\n";
 			parser.execute(ct_string); //send to parsing
 			break;
 			}
@@ -235,7 +243,8 @@ int main()
 			{
 			string ii_string;
 			string tname;
-			
+			bool firstcol =false;
+
 			cout<<"Enter table where you are going to be inserting: ";
 			getline(cin, tname);
 
@@ -245,15 +254,19 @@ int main()
 			tcolumn = parser.getcsize(tname); // Needs to take the amount of columns of a given table name
 			cout<<"Column Size: "<<tcolumn<<'\n';
 
-			for (int i = 0; i<=tcolumn;i++)
+			for (int i = 0; i<tcolumn;i++)
 			{
 				string tempattname;
 				cout<<"Enter variable attribute: ";
 				getline(cin, tempattname);
-				ii_string+='"'+tempattname+"\", ";
+				if (firstcol)
+				ii_string+=", ";
+				ii_string+='"'+tempattname+"\"";
+				firstcol=true;
 			}
 			
-			ii_string+=');'; //close parsing string
+			ii_string+=");"; //close parsing string
+			cout<<ii_string<<"\n";
 			parser.execute(ii_string); //send to parsing
 
 			break;
