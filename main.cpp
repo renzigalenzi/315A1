@@ -71,7 +71,7 @@ int main()
 	while (user!="5" || user.size()>1)
 	{
 		cout<<"\n(1) OPEN \n(2) WRITE \n(3) SHOW \n(4) CLOSE \n(5) EXIT \n\n"<<
-			"(a) CREATE TABLE \n(b) INSERT INTO \n(c) SELECTION \n(d) UNION \n(e) DIFFERENCE \n(d) PRODUCT \n\nOPTION: ";
+			"(a) CREATE TABLE \n(b) INSERT INTO \n(c) SELECTION \n(d) UNION \n(e) DIFFERENCE \n(f) PRODUCT \n\nOPTION: ";
 		//check to see if file is open
 		getline(cin, user);
 
@@ -284,21 +284,25 @@ int main()
 			{
 				string rel_string;
 				parser.execute(rel_string); //send to parsing
+				break;
 			}
 		case 13: //Projection
 			{
 				string proj_string;
 				parser.execute(proj_string); //send to parsing
+				break;
 			}
 		case 14: //Rename
 			{
 				string ren_string;
 				parser.execute(ren_string); //send to parsing
+				break;
 			}
 		case 15: //Update
 			{
 				string upd_string;
 				parser.execute(upd_string); //send to parsing
+				break;
 			}
 		default:
 			break;
