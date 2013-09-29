@@ -1,0 +1,14 @@
+CREATE TABLE convicts (name VARCHAR(20), charge VARCHAR(8), nickname VARCHAR(20), age INTEGER);
+
+INSERT INTO convicts VALUES FROM ("Joe", "murder", "BigJoe", 45);
+INSERT INTO convicts VALUES FROM ("Jose", "theft", "Tiny", 50);
+INSERT INTO convicts VALUES FROM ("Kevin", "murder", "Sloth", 20);
+INSERT INTO convicts VALUES FROM ("Mike", "taxes", "Greedy", 60);
+INSERT INTO convicts VALUES FROM ("Joe", "drugs", "Twiky Joe", 20);
+
+killers <- select (charge == "murder") convicts;
+young <- select (age < 25) convicts;
+old <- select (age > 40) convicts;
+
+
+
