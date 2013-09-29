@@ -14,6 +14,10 @@
 #include <time.h>
 #include <math.h>
 #include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <sstream>
 using namespace std;
 
 class colvar{
@@ -53,85 +57,9 @@ public:
 
 int main()
 {
-	/*int NumColumns=5;
-	int NumRows=5;
-	DBMS m(NumRows, NumColumns,"Original");
-	m.fill();
-	m.display();
-	m.setColumnName(0,"type");
-	m.setColumnName(1,"name");
-	m.setColumnName(2,"age");
-	m.setColumnName(3,"sex");
-	m.setColumnName(4,"security");
-	m.changeValue(2,3,"changed");
-	m.setTitle("Attributes Added");
-	
-	m.display();
-	m.show("sex", "changed");
-	m.add();
-	m.changeValue(m.getLastRow(),m.getColumn("type"),"0");
-	m.changeValue(m.getLastRow(),m.getColumn("name"),"Panda");
-	m.changeValue(m.getLastRow(),m.getColumn("age"),"19");
-	m.changeValue(m.getLastRow(),m.getColumn("sex"),"F");
-	m.changeValue(m.getLastRow(),m.getColumn("securit"),"3");
-	m.changeValue(3,m.getColumn("age"),"2");
-	m.display();
-	m.deleteAttr(m.getColumn("age"),"2");
-	m.display();
-	m.setTitle("Row Added");
-	m.display();
-	m.deleteRow(3);
-	m.setTitle("Row Deleted");
-	m.display();
-	m.deleteColumn(2);
-	m.setTitle("Column Deleted - Original Final");
-	m.display();
-	m.writeToFile();
-	/*
-	DBMS f(m.getDBMS(),"Second DBMS");
-	f.display();
-	f.changeValue(1,f.getColumn("type"),"0");
-	f.changeValue(4,f.getColumn("type"),"3");
-	//f.setColumnName(3,"securit"); //uncomment to show a failed union.
-	f.setTitle("Second DBMS Altered");
-	f.display();
-	DBMS tunion(m.setunion(f.getDBMS()),"Union DBMS - Original Final x Second Altered");
-	tunion.display();
-	DBMS tdifference(m.setdifference(f.getDBMS()),"Difference DBMS - Original Final x Second Altered");
-	tdifference.display();
-	//test cross product
-	DBMS cross1(5, 3, "Cross 1"); //rows > columns on either DBMS breaks it for some reason, vector out of range
-	//DBMS cross1(3, 3, "Cross 1");
-	cross1.fill();
-	cross1.setColumnName(0, "one");
-	cross1.setColumnName(1, "two");
-	//cross1.setColumnName(2, "three");
-	cross1.display();
 
-	DBMS cross2(5, 3, "Cross 2"); 
-	cross2.fill();
-	cross2.setColumnName(0, "four");
-	cross2.setColumnName(1, "five");
-	cross2.setColumnName(2, "six");
-	cross2.display();
-
-	vector<vector<string> > crossend;
-	crossend = cross1.crossproduct(cross2.getDBMS());
-	DBMS crossfinal(crossend, "Cross 1 X Cross 2");
-	crossfinal.display();
-	*/
-	//checking read file
 	Parser parser;
-	/*cout << "reading from file" << endl;
-	vector<string> stuff = parser.readfromfile("table");
-	for each (string s in stuff) {
-		if (s.size()>0)
-		{
-		cout <<"\nPARSING:: \n"<< s << "\n\n";
-		parser.execute(s);
-		}
-		
-	}*/
+ 
 	string user;
 	string stringtoparse;
 
@@ -140,14 +68,14 @@ int main()
 	int choice;
 
 	cout<<"Welcome to the DBMS Application \nPlease choose an option below by typing the appropiate character (1-5) or (a-i):";
-	while (user!="5")
+	while (user!="5" || user.size()>1)
 	{
 		cout<<"\n(1) OPEN \n(2) WRITE \n(3) SHOW \n(4) CLOSE \n(5) EXIT \n\n"<<
-			"(a) Create table \n(b) Insert into table \n\nOPTION: ";
+			"(a) CREATE TABLE \n(b) INSERT INTO \n(c) SELECTION \n(d) UNION \n(e) DIFFERENCE \n(d) PRODUCT \n\nOPTION: ";
 		//check to see if file is open
 		getline(cin, user);
 
-		for (int i = 0; i<=15; i++){
+		for (int i = 0; i<=15; i++){ //check with possible input
 			if (user==command[i]){
 				choice=i+1;
 				i=15;
@@ -190,12 +118,14 @@ int main()
 		case 6:// CREATE TABLE
 			{
 			vector<colvar> vars;
-			string tname, numvars;
+			string tname, numvars, cre_string;
 			bool firstcol =false;
 			cout<<"Enter name of the new table: ";
 			getline(cin, tname);
 			cout<<"Amount of variables: ";
 			getline(cin, numvars);
+
+			cre_string = "CREATE TABLE "+ tname + " ("; //starts string with table name
 
 			for (int j = 0 ; j <=(atoi(numvars.c_str())-1); j++)
 			{
@@ -218,58 +148,157 @@ int main()
 				vars.push_back(tempvar);
 			}
 
-			string ct_string = "CREATE TABLE "+ tname + " ("; //starts string with table name
-
 			for (int k = 0; k<=vars.size()-1; k++){
 				cout<<"Variable #"<<k+1<<vars.at(k).getvarname()<<'-'<<vars.at(k).getvartype()<<'-'<<vars.at(k).getvarsize()<<'\n';
 				if (vars.at(k).getvartype() == "string"){ //adds string column with respective size
 					if (firstcol)
-						ct_string+=", ";
-					ct_string+=vars.at(k).getvarname()+' '+"VARCHAR("+vars.at(k).getvarsize()+")";
+						cre_string+=", ";
+					cre_string+=vars.at(k).getvarname()+' '+"VARCHAR("+vars.at(k).getvarsize()+")";
 					firstcol=true;
 				} else if (vars.at(k).getvartype() == "integer"){ //adds integer column
 					if (firstcol)
-						ct_string+=", ";
-					ct_string+=vars.at(k).getvarname()+' '+"INTEGER";
+						cre_string+=", ";
+					cre_string+=vars.at(k).getvarname()+' '+"INTEGER";
 					firstcol=true;
 				}
 			}
-			ct_string+=");"; //close parsing string
-			cout<<ct_string<<"\n";
-			parser.execute(ct_string); //send to parsing
+			cre_string+=");"; //close parsing string
+			parser.execute(cre_string); //send to parsing
 			break;
 			}
 		case 7: //INSERT INTO
 			{
-			string ii_string;
-			string tname;
+			string ins_string, tname;
 			bool firstcol =false;
 
 			cout<<"Enter table where you are going to be inserting: ";
 			getline(cin, tname);
 
-			ii_string="INSERT INTO "+tname+" VALUES FROM (";
+			ins_string="INSERT INTO "+tname+" VALUES FROM (";
 
-			int tcolumn;
-			tcolumn = parser.getcsize(tname); // Needs to take the amount of columns of a given table name
-			cout<<"Column Size: "<<tcolumn<<'\n';
+			int tcolumn = parser.getcsize(tname); 
 
 			for (int i = 0; i<tcolumn;i++)
 			{
 				string tempattname;
-				cout<<"Enter variable attribute: ";
+				cout<<"Enter variable #"<<i+1<<" attribute: ";
 				getline(cin, tempattname);
 				if (firstcol)
-				ii_string+=", ";
-				ii_string+='"'+tempattname+"\"";
+				ins_string+=", ";
+				int num = atoi(tempattname.c_str()); 
+				if (!tempattname.empty() && tempattname.find_first_not_of("0123456789") == std::string::npos){ //check to see if it is an integer
+					stringstream ss;
+					ss<<num;
+					ins_string+=ss.str();
+				} else {
+					ins_string+='"'+tempattname+"\"";
+				}
+				
 				firstcol=true;
 			}
 			
-			ii_string+=");"; //close parsing string
-			cout<<ii_string<<"\n";
-			parser.execute(ii_string); //send to parsing
+			ins_string+=");"; //close parsing string
+			parser.execute(ins_string); //send to parsing
+			parser.execute("SHOW "+tname+";"); //display table with new entry
 
 			break;
+			}
+		case 8: //Selection
+			{
+				string tname, sname, cond, sel_string;
+				
+				cout<<"Enter table where you are going to be selecting from: ";
+				getline(cin, tname);
+
+				cout<<"Enter name of selection to store values: ";
+				getline(cin,sname);
+
+				cout<<"Enter conditional statement for your selection, \n"<<
+					"This is in the form of (variable) (relational operator) (variable) \n"<<
+					"Do not include '(' or ')' \n" <<
+					"You can use '<', '>', '==', '<=' & '>=' \n\n"<<
+					"Conditional Statement: ";
+				getline(cin,cond);
+
+				sel_string = sname + " <- select (" + cond + ')' + tname + ';'; //create parsing string
+
+				parser.execute(sel_string); //send to parsing
+				break;
+			}
+		case 9: //Union
+			{
+				string uvarname, ufirst, usecond, uni_string;
+
+				cout<<"Enter name to store union results: ";
+				getline(cin,uvarname);
+
+				cout<<"For Union you must have two tables to compare \n";
+				
+				cout<<"Enter name of first table: ";
+				getline(cin,ufirst);
+
+				cout<<"Enter name of second table: ";
+				getline(cin,usecond);
+
+				uni_string = uvarname + " <- " + ufirst + " + " + usecond + ';';
+				parser.execute(uni_string); //send to parsing
+				break;
+			}
+		case 10: //Difference
+			{
+				string dvarname, dfirst, dsecond, dif_string;
+				cout<<"Enter name to store difference results: ";
+				getline(cin,dvarname);
+
+				cout<<"For Difference you must have two tables to compare \n";
+				
+				cout<<"Enter name of first table: ";
+				getline(cin,dfirst);
+
+				cout<<"Enter name of second table: ";
+				getline(cin,dsecond);
+
+				dif_string = dvarname + " <- " + dfirst + " - " + dsecond + ';';
+				parser.execute(dif_string); //send to parsing
+				break;
+			}
+		case 11: //Product
+			{
+				string pvarname, pfirst, psecond, pro_string;
+				cout<<"Enter name to store product results: ";
+				getline(cin,pvarname);
+
+				cout<<"For Product you must have two tables to compare \n";
+				
+				cout<<"Enter name of first table: ";
+				getline(cin,pfirst);
+
+				cout<<"Enter name of second table: ";
+				getline(cin,psecond);
+
+				pro_string = pvarname + " <- " + pfirst + " * " + psecond + ';';
+				parser.execute(pro_string); //send to parsing
+				break;
+			}
+		case 12: //Relation
+			{
+				string rel_string;
+				parser.execute(rel_string); //send to parsing
+			}
+		case 13: //Projection
+			{
+				string proj_string;
+				parser.execute(proj_string); //send to parsing
+			}
+		case 14: //Rename
+			{
+				string ren_string;
+				parser.execute(ren_string); //send to parsing
+			}
+		case 15: //Update
+			{
+				string upd_string;
+				parser.execute(upd_string); //send to parsing
 			}
 		default:
 			break;
@@ -278,5 +307,3 @@ int main()
 	system("PAUSE");
 	return 0;
 }
-//show about box info window
-

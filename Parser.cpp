@@ -104,7 +104,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	//     starting with case 0: -  "0 - CREATE","1 - INSERT","2 - VARCHAR","3 - INTEGER","4 - VALUES","5 - RELATION","6 - SHOW","7 - <-","8 - select","9 - project","10 - rename","11 - WRITE","12 - CLOSE","13 - EXIT", "14 - OPEN"
 	switch(keyword)
 	{
-	case 0: 
+	case 0: // CREATE
 		validity = 4;
 		if (!valid(validity,words,position)) // if there isnt enough information provided, the create will not work.
 		{
