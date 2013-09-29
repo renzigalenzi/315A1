@@ -49,7 +49,7 @@ public:
 	void NotEquals(vector<string> expression, int i);
 	void doubleExpression(vector<string> expression, int i,int first, int second);
 
-	int getcsize();
+	int getcsize(string tname);
 };
 
 

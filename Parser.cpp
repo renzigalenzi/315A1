@@ -924,6 +924,7 @@ void Parser::doubleExpression(vector<string> expression,int i,int first, int sec
 
 }
 
-int Parser::getcsize(){
+int Parser::getcsize(string tname){
+	int csize = tablevector[getTable(tname)].getColumns();
 	return columnnames.size();
 }

@@ -242,7 +242,7 @@ int main()
 			ii_string="INSERT INTO "+tname+" VALUES FROM (";
 
 			int tcolumn;
-			tcolumn = parser.getcsize(); // Needs to take the amount of columns of a given table name
+			tcolumn = parser.getcsize(tname); // Needs to take the amount of columns of a given table name
 			cout<<"Column Size: "<<tcolumn<<'\n';
 
 			for (int i = 0; i<=tcolumn;i++)
