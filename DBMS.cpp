@@ -19,9 +19,6 @@
 using namespace std;
 
 
-
-
-
 void DBMS::fill()
 {
 	for (int i=0; i<vec.size(); i++)

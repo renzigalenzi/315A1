@@ -10,7 +10,6 @@
 
 #define PARSER_H_
 
-
 #include <vector>
 #include <string>
 #include <fstream>
@@ -49,6 +48,8 @@ public:
 	void Equals(vector<string> expression, int i);
 	void NotEquals(vector<string> expression, int i);
 	void doubleExpression(vector<string> expression, int i,int first, int second);
+
+	int getcsize();
 };
 
 

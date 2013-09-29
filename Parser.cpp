@@ -14,9 +14,7 @@
 #include <fstream>
 #include <sstream>
 
-
 using namespace std;
-
 
 //the .db file has to be in the project directory
 
@@ -103,7 +101,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	vector<string> tempkeyword;
 	int validity;
 
-	//     starting with case 0: -  "CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW","<-","select","project","rename"
+	//     starting with case 0: -  "0 - CREATE","1 - INSERT","2 - VARCHAR","3 - INTEGER","4 - VALUES","5 - RELATION","6 - SHOW","7 - <-","8 - select","9 - project","10 - rename","11 - WRITE","12 - CLOSE","13 - EXIT", "14 - OPEN"
 	switch(keyword)
 	{
 	case 0: 
@@ -924,4 +922,8 @@ void Parser::doubleExpression(vector<string> expression,int i,int first, int sec
 				tablevector[getTable("tempvector")].clear();
 				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector3")]);
 
+}
+
+int Parser::getcsize(){
+	return columnnames.size();
 }
