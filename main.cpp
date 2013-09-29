@@ -67,12 +67,17 @@ int main()
 
 	int choice;
 
-	cout<<"Welcome to the DBMS Application \nPlease choose an option below by typing the appropiate character (1-5) or (a-i):";
+	cout<<"Welcome to the DBMS Application \n";
+	
+	parser.execute("OPEN test;"); //Preload DBMS
+	cout<<"Convicts Database preloaded... \n";
+
 	while (user!="5" || user.size()>1)
 	{
-		cout<<"\n(1) OPEN \n(2) WRITE \n(3) SHOW \n(4) CLOSE \n(5) EXIT \n\n"<<
+		cout<<"Please choose an option below by typing the appropiate character (1-5) or (a-i):";
+		cout<<"--------------------\n(1) OPEN \n(2) WRITE \n(3) SHOW \n(4) CLOSE \n(5) EXIT \n--------------------\n"<<
 			"(a) CREATE TABLE \n(b) INSERT INTO \n(c) SELECTION \n(d) UNION \n(e) DIFFERENCE \n(f) PRODUCT \n\nOPTION: ";
-		//check to see if file is open
+
 		getline(cin, user);
 
 		for (int i = 0; i<=15; i++){ //check with possible input
@@ -227,24 +232,49 @@ int main()
 			}
 		case 9: //Union
 			{
-				string uvarname, ufirst, usecond, uni_string;
+				string ctname1, ctname2, uvarname, ufirst, usecond, uni_string;
 
 				cout<<"Enter name to store union results: ";
 				getline(cin,uvarname);
 
-				cout<<"For Union you must have two tables to compare \n";
+				uni_string += uvarname + " <- ";
+
+				cout<<"\nFor Union you must have two tables to compare \n\n"
+					<<"If you wish to make a conditional statement,\n"
+					<<"please type the conditional statement inside parentheses\n"
+					<<"(conditional statement)\n"
+					<<"then type the TABLE NAME for the conditional statement \n\n";
 				
-				cout<<"Enter name of first table: ";
+				cout<<"Enter NAME of FIRST table or conditional statement: ";
 				getline(cin,ufirst);
 
-				cout<<"Enter name of second table: ";
+				if (ufirst.at(0)=='(')
+				{
+					cout<<"TABLE NAME for conditional statement: ";
+					getline(cin,ctname1);
+					uni_string += "(select " + ufirst + ' ' + ctname1 + ") + ";
+				} else {
+					uni_string += ufirst + " + ";
+				}
+
+				cout<<"Enter NAME of SECOND table or conditional statement: ";
 				getline(cin,usecond);
 
-				uni_string = uvarname + " <- " + ufirst + " + " + usecond + ';';
+				if (usecond.at(0)=='(')
+				{
+					cout<<"TABLE NAME for conditional statement: ";
+					getline(cin,ctname2);
+					uni_string += "(select " + usecond + ' ' + ctname2 + ")";
+				} else {
+					uni_string += usecond;
+				}
+
+				uni_string += ';';
+				cout<<uni_string<<'\n';
 				parser.execute(uni_string); //send to parsing
 				break;
 			}
-		case 10: //Difference
+		case 10: //Difference -- Copy from Union until it works
 			{
 				string dvarname, dfirst, dsecond, dif_string;
 				cout<<"Enter name to store difference results: ";
@@ -259,10 +289,11 @@ int main()
 				getline(cin,dsecond);
 
 				dif_string = dvarname + " <- " + dfirst + " - " + dsecond + ';';
+				cout<<dif_string;
 				parser.execute(dif_string); //send to parsing
 				break;
 			}
-		case 11: //Product
+		case 11: //Product -- Copy from Union until it works
 			{
 				string pvarname, pfirst, psecond, pro_string;
 				cout<<"Enter name to store product results: ";
@@ -277,6 +308,7 @@ int main()
 				getline(cin,psecond);
 
 				pro_string = pvarname + " <- " + pfirst + " * " + psecond + ';';
+				cout<<pro_string;
 				parser.execute(pro_string); //send to parsing
 				break;
 			}

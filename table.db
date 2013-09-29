@@ -15,6 +15,7 @@ deathRows_or_Naughtys <- Naughtys + (select (type == "deathRow") convicts);
 
 oldkills <- killers + old;
 killdrug <- killers + (select (charge == "drugs") convicts);
+youngkill <- (select (age < 25) convicts) + killers;
 
 CREATE TABLE sentence (type VARCHAR(10)) PRIMARY KEY (type);
 
