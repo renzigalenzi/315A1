@@ -59,7 +59,7 @@ int main()
 {
 
 	Parser parser;
- 
+	vector<DBMS> tablevector;
 	string user;
 	string stringtoparse;
 
@@ -428,8 +428,20 @@ int main()
 			}
 		case 14: //Update
 			{
-				string upd_string;
-				parser.execute(upd_string); //send to parsing
+				tablevector = parser.getTables();
+				cout<<"\nLIST OF TABLES\n\n";
+				int displacement=1;
+				for (int i=0; i<tablevector.size(); i++)
+				{
+					if (tablevector[i].getTitle()!="tempvector"&&tablevector[i].getTitle()!="tempvector2"&&tablevector[i].getTitle()!="tempvector3")
+					{
+						cout<<displacement<<") "<<tablevector[i].getTitle()<<"\n";
+						displacement++;
+					}
+				}
+				cout<<"\n";
+				//string upd_string;
+				//parser.execute(upd_string); //send to parsing
 				break;
 			}
 		case 15: //Delete

@@ -50,6 +50,10 @@ public:
 	void doubleExpression(vector<string> expression, int i,int first, int second);
 
 	int getcsize(string tname);
+	vector<DBMS> getTables()
+	{
+		return tablevector;
+	}
 };
 
 
