@@ -97,6 +97,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	string tablename2;
 	isStatement=true;
 	string column;
+	string dummystring;
 	int tempposition;
 	vector<string> tempkeyword;
 	vector<string> elements;
@@ -117,17 +118,17 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		cout<< "ERROR: table already created\n";
 		break;
 		}
-		cout << "I am creating a table called "<<words[position+2]<< "\n"; // all of this is just to visualize what is going on, the work is done later
+		//cout << "I am creating a table called "<<words[position+2]<< "\n"; // all of this is just to visualize what is going on, the work is done later
 			tablename = words[position+2];
 			if (words[position+3]=="(")
-				cout<< "setting Columns to - \n";
+				cout<< "";
 			else
 			{
 				cout<<"ERROR: not a valid statement\n";
 				break;
 			}
 			columnnames.erase(columnnames.begin(),columnnames.end());
-				cout<< "Column "<<columnCounter<<" = "<<words[position+4]<<"\n";
+				//cout<< "Column "<<columnCounter<<" = "<<words[position+4]<<"\n";
 				columnnames.push_back(words[position+4]);
 			for (int i = position+2; i<words.size(); i++) // continue to intake column headers until there is a stopping point.
 			{
@@ -138,7 +139,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 				if (words[i]==",")
 				{
 					columnCounter++;
-					cout<< "Column "<<columnCounter<<" = "<<words[i+2]<<"\n";
+					//cout<< "Column "<<columnCounter<<" = "<<words[i+2]<<"\n";
 					columnnames.push_back(words[i+2]);
 				}
 			}
@@ -158,7 +159,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		break;
 		}
 
-		cout << "\nInserting element into table "<<words[position+2]<<"\n";
+		//cout << "\nInserting element into table "<<words[position+2]<<"\n";
 		if (!isname(words[position+2]))
 		{
 			cout<<tablename<<" - ERROR: is not a created table at the moment.\n";
@@ -174,11 +175,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		break;
 		}
 		
-		cout << "char value with "<<words[position+2]<<" characters will be possible in items within table.getColumn("<<words[position-1]<<")\n";
+		//cout << "char value with "<<words[position+2]<<" characters will be possible in items within table.getColumn("<<words[position-1]<<")\n";
 		break;
 	case 3:																	// INTEGER, make sure there is enough information for it (really just for show).
 
-		cout << "int value at table.getColumn("<<words[position-1]<<")\n";
+		//cout << "int value at table.getColumn("<<words[position-1]<<")\n";
 		break;
 	case 4:																		// VALUES, make sure there is enough information for it, then apply values according to order.
 		validity = 3;
@@ -191,14 +192,14 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		if (words[position+2]=="RELATION")
 		/**/		break;
 			columnCounter=0;
-			cout<< "\nSetting attribute "<<columnCounter<<" to "<<words[position+3]<<"\n";
+			//cout<< "\nSetting attribute "<<columnCounter<<" to "<<words[position+3]<<"\n";
 			tablevector[getTable(words[position-1])].changeValue(tablevector[getTable(words[position-1])].getLastRow(),columnCounter,words[position+3]); //apply the first column info
 			for (int i = position+2; i<words.size(); i++)
 			{
 				if (words[i]==",")// if there are any more columns to add, then add them
 				{		
 					columnCounter++;
-					cout<< "Setting attribute "<<columnCounter<<" to "<<words[i+2]<<"\n";
+					//cout<< "Setting attribute "<<columnCounter<<" to "<<words[i+2]<<"\n";
 					tablevector[getTable(words[position-1])].changeValue(tablevector[getTable(words[position-1])].getLastRow(),columnCounter,words[i+2]);
 					
 				}
@@ -226,7 +227,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			break;
 		}
 		column = words[position+3];
-		cout<<"\nfor "<<tablename<<" "<<tablevector[getTable(tablename)].getRows()<<",  -  "<<tablename2<<" . add()\n";
+		//cout<<"\nfor "<<tablename<<" "<<tablevector[getTable(tablename)].getRows()<<",  -  "<<tablename2<<" . add()\n";
 		if(tablevector[getTable(tablename)].getColumn(column)==-1||tablevector[getTable(tablename2)].getColumn(column)==-1)
 		{
 			cout<<column<<" - ERROR: is not a created column at the moment.\n";
@@ -239,8 +240,8 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			tablevector[getTable(tablename2)].changeValue(i,tablevector[getTable(tablename2)].getColumn(column)
 				,tablevector[getTable(tablename)].getElement(i,tablevector[getTable(tablename)].getColumn(column)));
 		}
-		tablevector[getTable(tablename)].display();
-		tablevector[getTable(tablename2)].display();
+		//tablevector[getTable(tablename)].display();
+		//tablevector[getTable(tablename2)].display();
 		break;
 	case 6: cout << "displaying "<< words[position+1]<<"\n";						//SHOW, shows the table if it exists.
 		tablename = words[position+1];
@@ -251,25 +252,25 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		break;
 
 
-	case 7: cout << "solving for <-\n";												//<- this one is really rough, but basically it knows there has to be an INSTRUCTION on the right side of the <-
+	case 7: //cout << "solving for <-\n";												//<- this one is really rough, but basically it knows there has to be an INSTRUCTION on the right side of the <-
 			tempposition = position;												//so it goes through and finds all instructions, which have 2 elements to them, the LIMITER, and TABLE reference.
 			while (getNextKeyword(words,position) != "null"&&tempposition!=-1)		//then it executes the command and becomes a new TABLE reference itself, so that any prior commands can be executed using its new information
 			{																		// INSTRUCTION (LIMITER) (INSTRUCTION (LIMITER) (TABLE)) -becomes- INSTRUCTION (LIMITER) (NEWTABLE) -becomes- NEWTABLE
 				if (getNextKeyword(words,tempposition)!="null")						// the final table is copies over to the left of the "<-"
 				{
-					cout<< "keywords are/is "<<getNextKeyword(words,tempposition)<<" at "<<getKeywordPosition(words, getNextKeyword(words,tempposition))<<"\n";
+					//cout<< "keywords are/is "<<getNextKeyword(words,tempposition)<<" at "<<getKeywordPosition(words, getNextKeyword(words,tempposition))<<"\n";
 					tempkeyword.push_back(getNextKeyword(words,tempposition));	
 				}tempposition = getKeywordPosition(words, getNextKeyword(words,tempposition));
 			}
-			cout<<"\n";
+			//cout<<"\n";
 			for (int i = tempkeyword.size()-1;i>-1; i--)
 			{
 				switch(getKeyNum(tempkeyword[i])) //"select","project","rename"
 				{
-				case 8: cout<<"dealing with a selection \n";
-						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
-						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
-						cout<<"\n";
+				case 8: //cout<<"dealing with a selection \n";
+						//cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
+						//cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
+						//cout<<"\n";
 						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
 							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
 						{
@@ -291,16 +292,16 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						}
 						tablename=solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2);
 						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
-						cout<<solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
-						tablevector[getTable("tempvector")].display();
+						dummystring = solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1);
+						//tablevector[getTable("tempvector")].display();
 						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
 					break;
 
 
-				case 9:cout<<"dealing with a projection \n";
-						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
-						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
-						cout<<"\n";
+				case 9://cout<<"dealing with a projection \n";
+						//cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
+						//cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
+						//cout<<"\n";
 						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
 							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
 							{
@@ -317,16 +318,16 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						else
 						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
 						
-						tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))].display();
+						//tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))].display();
 						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2));
 					break;
 
 
 
-				case 10:cout<<"dealing with a renaming \n";
-						cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
-						cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
-						cout<<"\n";
+				case 10://cout<<"dealing with a renaming \n";
+						//cout<<"first element is "<< getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)<<"\n";
+						//cout<<"second element is "<<getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)<<"\n";
+						//cout<<"\n";
 						if (getElementString(words,getKeywordPosition(words, tempkeyword[i]), 1)==""||
 							getElementString(words,getKeywordPosition(words, tempkeyword[i]), 2)=="")
 						{
@@ -346,10 +347,10 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						copy(tablevector[getTable("tempvector")],tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))].getDBMS());
 						cout<<"after\n";
 						}
-						tablevector[getTable("tempvector")].display();
-						cout<<"before2\n";
+						//tablevector[getTable("tempvector")].display();
+						//cout<<"before2\n";
 						rename(words,getKeywordPosition(words, tempkeyword[i]),tablevector[getTable("tempvector")]);
-						cout<<"after2\n";
+						//cout<<"after2\n";
 						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
 					break;
 				default: cout << "Null keyword\n";
@@ -361,7 +362,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			combineTables(words,position);
 			tablevector.push_back(DBMS(tablevector[getTable("tempvector")]));
 			tablevector[tablevector.size()-1].setTitle(words[position-1]);
-			tablevector[getTable(words[position-1])].display();
+			//tablevector[getTable(words[position-1])].display();
 			}
 		break;
 	
@@ -397,7 +398,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			vechere = readfromfile(tablename);
 			for each (string s in vechere) {
 				if (s.size()>0) {
-					cout <<"\nPARSING:: \n"<< s << "\n\n";
+					//cout <<"\nPARSING:: \n"<< s << "\n\n";
 					execute(s);
 				}
 			}
@@ -423,13 +424,13 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			break;
 		}
 		elements.push_back(words[position+6]);
-		cout<< "\nGetting attribute "<<words[position+6]<<"\n"; //apply the first column info
+		//cout<< "\nGetting attribute "<<words[position+6]<<"\n"; //apply the first column info
 			for (int i = position+2; i<words.size(); i++)
 			{
 				if (words[i]==",")// if there are any more columns to add, then add them
 				{		
 					columnCounter++;
-					cout<< "Getting attribute "<<words[i+2]<<"\n";
+					//cout<< "Getting attribute "<<words[i+2]<<"\n";
 					elements.push_back(words[i+2]);
 					
 				}
@@ -459,7 +460,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		break;
 		}
 
-		cout << "\nDeleting element from table "<<words[position+2]<<"\n";
+		//cout << "\nDeleting element from table "<<words[position+2]<<"\n";
 		tablename = words[position+2];
 		if (!isname(words[position+2]))
 		{
@@ -849,7 +850,6 @@ void Parser::rename(vector<string> words, int position, DBMS vec)
 			}
 	}
 	int counter=0;
-	cout<<"i am here so far\n";
 	for (int i=0; i<expression.size(); i++)
 		{
 			if (expression[i]=="("||expression[i]==")")
@@ -859,17 +859,14 @@ void Parser::rename(vector<string> words, int position, DBMS vec)
 			else if(expression[i]==",")
 			{
 				if(counter==0)
-				{
-					cout<<"first one "<<counter<<" \n";
+				{					
 					vec.setColumnName(counter,expression[i-1]);
 					counter++;
-					cout<<"first one done "<<counter<<" \n";
 					
 				}
 				if(counter>0)
 				{
 					vec.setColumnName(counter,expression[i+2]);
-					cout<<counter<<"th one\n";
 					counter++;
 					
 				}
@@ -882,7 +879,6 @@ bool Parser::valid(int length, vector<string> words, int position)
 	int whatsLeft=words.size()-position;
 	if (whatsLeft<length)
 	{
-		cout<<whatsLeft<<" " <<length<<"\n";
 		return false;
 	}
 		
@@ -914,16 +910,11 @@ vector<string> Parser::replaceWords(vector<string> words,int begin, int end,stri
 void Parser::combineTables(vector<string> words, int position)
 {
 	int counter=0;
-	for (int i=0; i<words.size(); i++)
-	{
-		cout<<words[i];
-	}
-	cout<<"\n";
+
 	for (int i=position; i<words.size(); i++)
 	{
 		if (words[i]=="("||words[i]==")")
 				words[i].erase();
-		cout<<words[i];
 	}
 	for (int i=words.size()-1; i>=position; i--)
 		{	
@@ -951,7 +942,7 @@ void Parser::combineTables(vector<string> words, int position)
 				words[i-1]="tempvector";
 				words[i].erase();
 				words[i+1].erase();
-				tablevector[getTable("tempvector")].display();
+				//tablevector[getTable("tempvector")].display();
 				
 				
 			}
@@ -979,10 +970,8 @@ void Parser::Equals(vector<string> expression,int i)
 				if(twoTables)
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1&&j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
 				{
-					//cout<<"what in the \n";
 					if(twoTables&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))!=tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i+1]))&&twoTables)
 					{
-						//cout<<"this is happening!\n";
 						tablevector[getTable("tempvector")].deleteRow(j);
 						tablevector[getTable("tempvector2")].deleteRow(j);
 						j--;
@@ -1005,10 +994,8 @@ void Parser::NotEquals(vector<string> expression,int i)
 				if(twoTables)
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1&&j<=tablevector[getTable("tempvector2")].getRows()-1; j++)
 				{
-					//cout<<"what in the \n";
 					if(twoTables&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector2")].getElement(j,tablevector[getTable("tempvector2")].getColumn(expression[i+1])))
 					{
-						//cout<<"this is happening!\n";
 						tablevector[getTable("tempvector")].deleteRow(j);
 						tablevector[getTable("tempvector2")].deleteRow(j);
 						j--;
@@ -1117,7 +1104,7 @@ void Parser::doubleExpression(vector<string> expression,int i,int first, int sec
 					}
 					}
 				}
-				tablevector[getTable("tempvector3")].display();
+				//tablevector[getTable("tempvector3")].display();
 				tablevector[getTable("tempvector")].clear();
 				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector3")]);
 

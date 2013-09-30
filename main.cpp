@@ -67,12 +67,13 @@ int main()
 
 	int choice=5;
 	cout<<"Welcome to the DBMS Application \n";
-	
+	cout<<"You are now exploring the Asylum database\n";
 	parser.execute("OPEN test;"); //Preload DBMS
 	cout<<"Convicts Database preloaded... \n";
 
 	while (user!="5" || user.size()>1)
 	{
+		cout<<"ASYLUM DATABASE\n";
 		cout<<"Please choose an option below by typing the appropiate character (1-5) or (a-i):";
 		cout<<"--------------------\n(1) OPEN \n(2) WRITE \n(3) SHOW \n(4) CLOSE \n(5) EXIT \n--------------------\n"<<
 			"(a) CREATE TABLE \n(b) INSERT INTO \n(c) SELECTION \n(d) UNION \n(e) DIFFERENCE \n(f) PRODUCT \n"<<

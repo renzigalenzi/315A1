@@ -234,7 +234,7 @@ void DBMS::deleteRow(int n)
 		vec.erase(vec.begin() + n);
 	}
 	//vec.resize(vec.size()-1);
-	cout<<"row "<<n<<" deleted.\n";
+	//cout<<"row "<<n<<" deleted.\n";
 }
 void DBMS::clear()
 {
@@ -251,7 +251,7 @@ void DBMS::deleteAttr(int n,string attr)
 		i--;
 		}
 	}
-	cout<<"row "<<n<<" deleted.\n";
+	//cout<<"row "<<n<<" deleted.\n";
 }
 void DBMS::deleteColumn(int n)
 {
@@ -262,11 +262,11 @@ void DBMS::deleteColumn(int n)
 			vec[i].erase(vec[i].begin() + n);
 		}
 	}
-	cout<<"column "<<n<<" deleted.\n";
+	//cout<<"column "<<n<<" deleted.\n";
 }
 
 void DBMS::show(string Colname, string comparitor){
-	cout<<"finding elements of column \""<<Colname<<"\" with type \""<< comparitor<<"\".\n";
+	//cout<<"finding elements of column \""<<Colname<<"\" with type \""<< comparitor<<"\".\n";
 	int keyColumn = -1;
 	for (int j=0; j<vec[0].size(); j++)
 		{	
@@ -281,7 +281,7 @@ void DBMS::show(string Colname, string comparitor){
 	for (int j=0; j<vec.size(); j++)
 		{	
 			if (vec[j][keyColumn]==comparitor){
-			cout<<"Item Found!\n";
+			//cout<<"Item Found!\n";
 			display(j);
 			break;
 			}
