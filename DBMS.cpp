@@ -111,13 +111,11 @@ vector<vector<string> > DBMS::setunion(vector<vector<string> > vec2){
 				offsety++;
 				}
 				}
-				cout<<i<<" "<<j<<" "<<k<<"\n";
 			}
 		}
 	}
 	offsety=vecFinal.size();
 	for (int i = 0; i < vec.size(); i++) {// now that the final vector only contains the differences between the first and second vector, add the first vector back in.
-		cout<<"pushing!\n";
 		vecFinal.push_back(vec[i]);
 	}
 	vecFinal.erase(vecFinal.begin() +offsety);

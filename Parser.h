@@ -25,8 +25,8 @@ class Parser {
 
 public:
 	Parser() {
-		string keyArray[15] = {"CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW","<-","select","project","rename","WRITE","CLOSE","EXIT", "OPEN"};// dont forget to change size after adding anything
-		keywords.assign(keyArray, keyArray+15);// change this size too
+		string keyArray[16] = {"CREATE","INSERT","VARCHAR","INTEGER","VALUES","RELATION","SHOW","<-","select","project","rename","WRITE","CLOSE","EXIT", "OPEN", "DELETE"};// dont forget to change size after adding anything
+		keywords.assign(keyArray, keyArray+16);// change this size too
 	}
 	vector<string> readfromfile(string filename); //each element is a line, delimited by ';'
 	void execute(string s);
