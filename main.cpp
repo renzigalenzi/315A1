@@ -76,7 +76,8 @@ int main()
 	{
 		cout<<"Please choose an option below by typing the appropiate character (1-5) or (a-i):";
 		cout<<"--------------------\n(1) OPEN \n(2) WRITE \n(3) SHOW \n(4) CLOSE \n(5) EXIT \n--------------------\n"<<
-			"(a) CREATE TABLE \n(b) INSERT INTO \n(c) SELECTION \n(d) UNION \n(e) DIFFERENCE \n(f) PRODUCT \n\nOPTION: ";
+			"(a) CREATE TABLE \n(b) INSERT INTO \n(c) SELECTION \n(d) UNION \n(e) DIFFERENCE \n(f) PRODUCT \n"<<
+			"(g) PROJECTION \n(h) RENAME \n(i) UPDATE \n(j) DELETE \n\nOPTION: ";
 
 		getline(cin, user);
 
@@ -360,28 +361,81 @@ int main()
 				parser.execute(pro_string); //send to parsing
 				break;
 			}
-		case 12: //Relation
+		case 12: //Projection
 			{
-				string rel_string;
-				parser.execute(rel_string); //send to parsing
-				break;
-			}
-		case 13: //Projection
-			{
-				string proj_string;
+				string relvarname, tname, tcolumn, pnum, proj_string;
+				int pint;
+				cout<<"Enter NAME to store relation results: ";
+				getline(cin,relvarname);
+
+				cout<<"Enter NAME of the table your are going to work on: ";
+				getline(cin,tname);
+
+				cout<<"Enter # of projections to extract: ";
+				getline(cin,pnum);
+				pint = atoi(pnum.c_str());
+
+				proj_string = "INSERT INTO " + relvarname + " VALUES FROM RELATION project (";
+				for (int i = 0; i<pint; i++)
+				{
+					string tempname;
+					cout<<"Enter NAME of relation #"<<i+1<<": ";
+					getline(cin,tempname);
+					if (i+1==pint)
+					{
+						proj_string+=tempname+")";
+					} else {
+						proj_string+=tempname+", ";
+					}
+				}
+				proj_string+=' ' + tname + ';' ;
+				cout<<'\n'<<proj_string<<'\n';
 				parser.execute(proj_string); //send to parsing
 				break;
 			}
-		case 14: //Rename
+		case 13: //Rename
 			{
-				string ren_string;
+				string renvarname, tname, ren_string;
+
+				cout<<"To rename you must save to a new location.\nEnter NAME to store renaming results: ";
+				getline(cin,renvarname);
+
+				cout<<"Enter NAME of table to rename: ";
+				getline(cin, tname);
+
+				int tcolumn = parser.getcsize(tname);
+				cout<<"You must RENAME "<<tcolumn<<" variables... \n";
+
+				ren_string = renvarname + " <- rename (";
+
+				for (int i = 0; i<tcolumn; i++)
+				{
+					string tempnewname;
+					cout<<"Enter NAME of new variables #"<<i+1<<": ";
+					getline(cin,tempnewname);
+					if (i+1==tcolumn)
+					{
+						ren_string+=tempnewname+")";
+					} else {
+						ren_string+=tempnewname+", ";
+					}
+				}
+
+				ren_string+=' ' + tname + ';' ;
+				cout<<'\n'<<ren_string<<'\n';
 				parser.execute(ren_string); //send to parsing
 				break;
 			}
-		case 15: //Update
+		case 14: //Update
 			{
 				string upd_string;
 				parser.execute(upd_string); //send to parsing
+				break;
+			}
+		case 15: //Delete
+			{
+				string del_string;
+				parser.execute(del_string); //send to parsing
 				break;
 			}
 		default:
