@@ -210,10 +210,26 @@ int main()
 			}
 		case 8: //Selection
 			{
-				string tname, sname, cond, sel_string;
-				
+				string tname, tname2, tnumber, sname, cond, sel_string;
+				while (tnumber != "2"&&tnumber != "1")
+				{
+				tnumber="";
+				cout<<"Selection using 1 or 2 Tables? : ";
+				getline(cin, tnumber);
+				cout<<tnumber<<"\n";
+				}
+				if (tnumber == "2")
+				{
+					cout<<"Enter first table where you are going to be selecting from: ";
+					getline(cin, tname);
+					cout<<"Enter second table where you are going to be selecting from: ";
+					getline(cin, tname2);
+				}
+				else
+				{
 				cout<<"Enter table where you are going to be selecting from: ";
 				getline(cin, tname);
+				}
 
 				cout<<"Enter name of selection to store values: ";
 				getline(cin,sname);
@@ -221,11 +237,16 @@ int main()
 				cout<<"Enter conditional statement for your selection, \n"<<
 					"This is in the form of (variable) (relational operator) (variable) \n"<<
 					"Do not include '(' or ')' \n" <<
-					"You can use '<', '>', '==', '<=' & '>=' \n\n"<<
+					"You can use '<', '>', '==', '<=', '&&', '>=' \n\n"<<
 					"Conditional Statement: ";
 				getline(cin,cond);
 
-				sel_string = sname + " <- select (" + cond + ')' + tname + ';'; //create parsing string
+				if (tnumber == "2")
+				{
+					sel_string = sname + " <- select (" + cond + ')' + '(' + tname + " * " + tname2 +')'+ ';';
+				}
+				else
+					sel_string = sname + " <- select (" + cond + ')' + tname + ';'; //create parsing string
 
 				parser.execute(sel_string); //send to parsing
 				break;
@@ -245,26 +266,26 @@ int main()
 					<<"(conditional statement)\n"
 					<<"then type the TABLE NAME for the conditional statement \n\n";
 				
-				cout<<"Enter NAME of FIRST table or conditional statement: ";
+				cout<<"Enter NAME of FIRST table or ENTIRE conditional statement: ";
 				getline(cin,ufirst);
 
 				if (ufirst.at(0)=='(')
 				{
 					cout<<"TABLE NAME for conditional statement: ";
 					getline(cin,ctname1);
-					uni_string += "(select " + ufirst + ' ' + ctname1 + ") + ";
+					uni_string += "(select " + ufirst + ' ' + '(' + ctname1;
 				} else {
 					uni_string += ufirst + " + ";
 				}
 
-				cout<<"Enter NAME of SECOND table or conditional statement: ";
+				cout<<"Enter NAME of SECOND table: ";
 				getline(cin,usecond);
 
-				if (usecond.at(0)=='(')
+				if (ufirst.at(0)=='(')
 				{
-					cout<<"TABLE NAME for conditional statement: ";
-					getline(cin,ctname2);
-					uni_string += "(select " + usecond + ' ' + ctname2 + ")";
+					/*cout<<"TABLE NAME for conditional statement: ";
+					getline(cin,ctname2);*/
+					uni_string += " * " + usecond+ "))";
 				} else {
 					uni_string += usecond;
 				}
@@ -277,20 +298,46 @@ int main()
 			}
 		case 10: //Difference -- Copy from Union until it works
 			{
-				string dvarname, dfirst, dsecond, dif_string;
-				cout<<"Enter name to store difference results: ";
+				string ctname1, ctname2, dvarname, dfirst, dsecond, dif_string;
+
+				cout<<"Enter name to store union results: ";
 				getline(cin,dvarname);
 
-				cout<<"For Difference you must have two tables to compare \n";
+				dif_string += dvarname + " <- ";
+
+				cout<<"\nFor Union you must have two tables to compare \n\n"
+					<<"If you wish to make a conditional statement,\n"
+					<<"please type the conditional statement inside parentheses\n"
+					<<"(conditional statement)\n"
+					<<"then type the TABLE NAME for the conditional statement \n\n";
 				
-				cout<<"Enter name of first table: ";
+				cout<<"Enter NAME of FIRST table or conditional statement: ";
 				getline(cin,dfirst);
 
-				cout<<"Enter name of second table: ";
+				if (dfirst.at(0)=='(')
+				{
+					cout<<"TABLE NAME for conditional statement: ";
+					getline(cin,ctname1);
+					dif_string += "(select " + dfirst + ' ' + ctname1 + ") - ";
+				} else {
+					dif_string += dfirst + " - ";
+				}
+
+				cout<<"Enter NAME of SECOND table or conditional statement: ";
 				getline(cin,dsecond);
 
-				dif_string = dvarname + " <- " + dfirst + " - " + dsecond + ';';
-				cout<<dif_string;
+				if (dsecond.at(0)=='(')
+				{
+					cout<<"TABLE NAME for conditional statement: ";
+					getline(cin,ctname2);
+					dif_string += "(select " + dsecond + ' ' + ctname2 + ")";
+				} else {
+					dif_string += dsecond;
+				}
+
+				dif_string += ';';
+				cout<<dif_string<<'\n';
+
 				parser.execute(dif_string); //send to parsing
 				break;
 			}

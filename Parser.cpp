@@ -548,7 +548,7 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			{
 			expression[i].erase();
 			}
-			else if(expression[i]=="+")
+			/*else if(expression[i]=="+")
 			{
 				copy(tablevector[getTable("tempvector")],tablevector[getTable(expression[i-1])]);
 				tablevector[getTable("tempvector")].setunion(tablevector[getTable(expression[i+1])].getDBMS());
@@ -556,10 +556,10 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				for (int j=0;j<deleteRange;j++)
 				expression[i+j].erase();
 				i--;
-			}	
+			}	*/
 			else if(expression[i]=="==")
 			{
-				Equals(expression,i);
+				
 				if (expression[i+2]=="&&")
 				{
 					if (expression[i+4]=="==")
@@ -568,6 +568,8 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 						doubleExpression(expression,i,1,2);
 					deleteRange+=4;
 				}
+				else
+					Equals(expression,i);
 				expression[i-1]="tempvector";
 				for (int j=0;j<deleteRange;j++)
 				expression[i+j].erase();
@@ -668,6 +670,8 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 						doubleExpression(expression,i,2,2);
 					deleteRange+=4;
 				}
+				else
+					NotEquals(expression,i);
 				expression[i-1]="tempvector";
 				for (int j=0;j<deleteRange;j++)
 				expression[i+j].erase();
@@ -832,9 +836,7 @@ void Parser::combineTables(vector<string> words, int position)
 				}
 				else if (words[i]=="+")
 				{
-				tablevector[getTable("tempvector")].display();
 				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].setunion(tablevector[getTable(words[i-1])].getDBMS()));
-				tablevector[getTable("tempvector")].display();
 				}
 				else if (words[i]=="*")
 				copy(tablevector[getTable("tempvector")],tablevector[getTable("tempvector")].crossproduct(tablevector[getTable(words[i-1])].getDBMS()));
@@ -909,7 +911,9 @@ void Parser::NotEquals(vector<string> expression,int i)
 
 void Parser::doubleExpression(vector<string> expression,int i,int first, int second)
 {
-	int columncount=1;
+				int columncount=1;
+				int copied = 0;
+				bool alreadycopied = false;
 				tablevector[getTable("tempvector3")].clear();
 				tablevector[getTable("tempvector3")].add();
 				for (int j=0; j<=tablevector[getTable("tempvector2")].getColumns()-1; j++)
@@ -954,6 +958,7 @@ void Parser::doubleExpression(vector<string> expression,int i,int first, int sec
 				if(twoTables)														//// Two Tables being compared
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
 				{
+					alreadycopied=false;
 					for (int k=1; k<=tablevector[getTable("tempvector2")].getRows()-1; k++)
 					{
 					if(first==1&&second==2)
@@ -961,12 +966,22 @@ void Parser::doubleExpression(vector<string> expression,int i,int first, int sec
 						if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+1]))
 							&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i+3]))!=tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+5])))
 						{
+							copied = i;
+							if (!alreadycopied)
+							{
+							tablevector[getTable("tempvector3")].add();
+							columncount++;
+							}
+							tablevector[getTable("tempvector3")].add();
 							for (int column=0; column<tablevector[getTable("tempvector2")].getColumns(); column++)
 							{
-								tablevector[getTable("tempvector3")].add();
 								tablevector[getTable("tempvector3")].changeValue(columncount,column,tablevector[getTable("tempvector2")].getElement(k,column));
-								
-							}columncount++;
+								if (!alreadycopied)
+								tablevector[getTable("tempvector3")].changeValue(columncount-1,column,tablevector[getTable("tempvector")].getElement(j,column));
+							}
+							if (copied == i)
+								alreadycopied = true;
+							columncount++;
 						}
 					}
 					}
