@@ -38,7 +38,10 @@ void DBMS::display()
 	cout<<"\nTable name: "<<title;
 	for (int i=0; i<vec.size(); i++)
 	{
-		cout<<"\n";
+		if (i==0)
+		cout<<"\n   ";
+		else
+		cout<<"\n"<<i<<") ";
 		for (int j=0; j<vec[i].size(); j++)
 		{
 			cout<<vec[i][j];

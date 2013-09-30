@@ -65,8 +65,7 @@ int main()
 
 	string command[15] = {"1","2","3","4","5","a","b","c","d","e","f","g","h","i","j"};
 
-	int choice;
-
+	int choice=5;
 	cout<<"Welcome to the DBMS Application \n";
 	
 	parser.execute("OPEN test;"); //Preload DBMS
@@ -81,13 +80,12 @@ int main()
 
 		getline(cin, user);
 
-		for (int i = 0; i<=15; i++){ //check with possible input
+		for (int i = 0; i<15; i++){ //check with possible input
 			if (user==command[i]){
 				choice=i+1;
 				i=15;
 			}
 		}
-
 		switch(choice)
 		{
 		//Numerical options 1 through 5 are about file management
@@ -174,13 +172,20 @@ int main()
 			}
 		case 7: //INSERT INTO
 			{
-			string ins_string, tname;
+			string ins_string, tname, type, referencename, columname;
 			bool firstcol =false;
 
 			cout<<"Enter table where you are going to be inserting: ";
 			getline(cin, tname);
 
+			cout<<"Are you 1) Creating new Values, or 2) Copying from another Table? : ";
+			while (type != "1" && type != "2")
+			getline(cin, type);
+			
+			if (type=="1")
+			{
 			ins_string="INSERT INTO "+tname+" VALUES FROM (";
+			
 
 			int tcolumn = parser.getcsize(tname); 
 
@@ -202,8 +207,20 @@ int main()
 				
 				firstcol=true;
 			}
-			
 			ins_string+=");"; //close parsing string
+			}
+			if (type == "2")
+			{
+			ins_string="INSERT INTO "+tname+" VALUES FROM RELATION ";
+			cout<<"Enter the table name you will get values from: ";
+				getline(cin, referencename);
+			cout<<"Enter the desired Column to copy: ";
+				getline(cin, columname);
+
+			ins_string+="project (" + columname + ") " +referencename + ";";
+
+			}
+			
 			parser.execute(ins_string); //send to parsing
 			parser.execute("SHOW "+tname+";"); //display table with new entry
 
@@ -428,21 +445,38 @@ int main()
 			}
 		case 14: //Update
 			{
-				tablevector = parser.getTables();
-				cout<<"\nLIST OF TABLES\n\n";
-				int displacement=1;
-				for (int i=0; i<tablevector.size(); i++)
-				{
-					if (tablevector[i].getTitle()!="tempvector"&&tablevector[i].getTitle()!="tempvector2"&&tablevector[i].getTitle()!="tempvector3")
-					{
-						cout<<displacement<<") "<<tablevector[i].getTitle()<<"\n";
-						displacement++;
-					}
+			string change_string, tname, elemnum, columnum, tempattname;
+			bool firstcol =false;
+
+			cout<<"Enter table where you are going to be changing: ";
+			getline(cin, tname);
+
+			change_string="UPDATE FROM "+tname+" VALUE FROM (";
+
+			int tcolumn = parser.getcsize(tname); 
+			parser.execute("SHOW "+tname+";");
+				cout<<"Enter row # to change : ";
+				getline(cin, elemnum);
+				cout<<"Enter column name :";
+				getline(cin, columnum);
+				cout<<"Enter new value :";
+				getline(cin, tempattname);
+				change_string+=elemnum + ", " + columnum + ", ";
+				int num = atoi(tempattname.c_str()); 
+				if (!tempattname.empty() && tempattname.find_first_not_of("0123456789") == std::string::npos){ //check to see if it is an integer
+					stringstream ss;
+					ss<<num;
+					change_string+=ss.str();
+				} else {
+					change_string+='"'+tempattname+"\"";
 				}
-				cout<<"\n";
-				//string upd_string;
-				//parser.execute(upd_string); //send to parsing
-				break;
+			change_string+=");"; //close parsing string
+			cout<<change_string<<"\n";
+			parser.execute(change_string); //send to parsing
+			parser.execute("SHOW "+tname+";"); //display table with new entry
+
+			break;
+
 			}
 		case 15: //Delete
 			{

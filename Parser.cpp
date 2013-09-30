@@ -232,10 +232,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			cout<<column<<" - ERROR: is not a created column at the moment.\n";
 			break;
 		}
+		while(tablevector[getTable(tablename2)].getRows()<tablevector[getTable(tablename)].getRows())
+			tablevector[getTable(tablename2)].add();
 		for (int i=1; i<tablevector[getTable(tablename)].getRows(); i++) // add new rows to the table being created, then fill the row with the information desired.
 		{
-			tablevector[getTable(tablename2)].add();
-			tablevector[getTable(tablename2)].changeValue(tablevector[getTable(tablename2)].getLastRow(),tablevector[getTable(tablename2)].getColumn(column)
+			tablevector[getTable(tablename2)].changeValue(i,tablevector[getTable(tablename2)].getColumn(column)
 				,tablevector[getTable(tablename)].getElement(i,tablevector[getTable(tablename)].getColumn(column)));
 		}
 		tablevector[getTable(tablename)].display();
@@ -448,6 +449,26 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 				}
 			}
 		}
+		break;
+	case 16:
+		// UPDATE, make sure there is enough information for it, then execute.
+		validity = 2;
+		if (!valid(validity,words,position))
+		{
+		cout<< "ERROR: not a valid statement, needs 2 arguments with parenthesis\n";
+		break;
+		}
+
+		cout << "\nDeleting element from table "<<words[position+2]<<"\n";
+		tablename = words[position+2];
+		if (!isname(words[position+2]))
+		{
+			cout<<tablename<<" - ERROR: is not a created table at the moment.\n";
+			break;
+		}
+		tempposition = atoi(words[position+6].c_str()); 
+		tablevector[getTable(tablename)].changeValue(tempposition,tablevector[getTable(tablename)].getColumn(words[position+9]),words[position+12]);
+		
 		break;
 	default: cout << "how did that happen?\n";
 		break;
@@ -1052,6 +1073,29 @@ void Parser::doubleExpression(vector<string> expression,int i,int first, int sec
 					{
 						if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+1]))
 							&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i+3]))!=tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+5])))
+						{
+							copied = i;
+							if (!alreadycopied)
+							{
+							tablevector[getTable("tempvector3")].add();
+							columncount++;
+							}
+							tablevector[getTable("tempvector3")].add();
+							for (int column=0; column<tablevector[getTable("tempvector2")].getColumns(); column++)
+							{
+								tablevector[getTable("tempvector3")].changeValue(columncount,column,tablevector[getTable("tempvector2")].getElement(k,column));
+								if (!alreadycopied)
+								tablevector[getTable("tempvector3")].changeValue(columncount-1,column,tablevector[getTable("tempvector")].getElement(j,column));
+							}
+							if (copied == i)
+								alreadycopied = true;
+							columncount++;
+						}
+					}
+					if(first==1&&second==1)
+					{
+						if(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1]))==tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+1]))
+							&&tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i+3]))==tablevector[getTable("tempvector2")].getElement(k,tablevector[getTable("tempvector2")].getColumn(expression[i+5])))
 						{
 							copied = i;
 							if (!alreadycopied)
