@@ -95,7 +95,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	int columnCounter = 0;
 	string tablename;
 	string tablename2;
-	bool isStatement=true;
+	isStatement=true;
 	string column;
 	int tempposition;
 	vector<string> tempkeyword;
@@ -110,6 +110,11 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 		if (!valid(validity,words,position)) // if there isnt enough information provided, the create will not work.
 		{
 		cout<< "ERROR: not a valid statement, needs 2 arguments with parenthesis\n";
+		break;
+		}
+		if (isname(words[position+2])) // if there isnt enough information provided, the create will not work.
+		{
+		cout<< "ERROR: table already created\n";
 		break;
 		}
 		cout << "I am creating a table called "<<words[position+2]<< "\n"; // all of this is just to visualize what is going on, the work is done later
@@ -607,6 +612,11 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			}	*/
 			else if(expression[i]=="==")
 			{
+				if (tablevector[getTable("tempvector")].getColumn(expression[i-1])==-1)
+				{
+					isStatement = false;
+					break;
+				}
 				
 				if (expression[i+2]=="&&")
 				{
@@ -639,8 +649,13 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				if (check2==false)
 					{columnnames.push_back(expression[i+2]);}
 			}
-			else if(expression[i]==">"&&tablevector[getTable("tempvector")].getColumn(expression[i-1])!=-1)
+			else if(expression[i]==">")
 			{
+				if (tablevector[getTable("tempvector")].getColumn(expression[i-1])==-1)
+				{
+					isStatement = false;
+					break;
+				}
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
 				{
 					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
@@ -656,8 +671,13 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 				expression[i+1].erase();
 				i--;
 			}
-			else if(expression[i]==">="&&tablevector[getTable("tempvector")].getColumn(expression[i-1])!=-1)
+			else if(expression[i]==">=")
 			{
+				if (tablevector[getTable("tempvector")].getColumn(expression[i-1])==-1)
+				{
+					isStatement = false;
+					break;
+				}
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
 				{
 					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
@@ -675,6 +695,11 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			}
 			else if(expression[i]=="<")
 			{
+				if (tablevector[getTable("tempvector")].getColumn(expression[i-1])==-1)
+				{
+					isStatement = false;
+					break;
+				}
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
 				{
 					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
@@ -692,6 +717,11 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			}
 		else if(expression[i]=="<=")
 			{
+				if (tablevector[getTable("tempvector")].getColumn(expression[i-1])==-1)
+				{
+					isStatement = false;
+					break;
+				}
 				for (int j=1; j<=tablevector[getTable("tempvector")].getRows()-1; j++)
 				{
 					int n1=StringToNumber(tablevector[getTable("tempvector")].getElement(j,tablevector[getTable("tempvector")].getColumn(expression[i-1])));
@@ -709,6 +739,11 @@ string Parser::solveElementString(vector<string> words, int position, int elemen
 			}
 		else if(expression[i]=="!=")
 			{
+				if (tablevector[getTable("tempvector")].getColumn(expression[i-1])==-1)
+				{
+					isStatement = false;
+					break;
+				}
 				NotEquals(expression,i);
 				if (expression[i+2]=="&&")
 				{

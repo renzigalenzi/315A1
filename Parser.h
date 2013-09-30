@@ -22,6 +22,7 @@ class Parser {
 	vector<DBMS> tempvector;
 	vector<string> columnnames;
 	bool twoTables;
+	bool isStatement;
 
 public:
 	Parser() {

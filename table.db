@@ -1,35 +1,35 @@
-CREATE TABLE convicts (name VARCHAR(20), type VARCHAR(8), years INTEGER) PRIMARY KEY (name, type);
+CREATE TABLE convicts2 (name VARCHAR(20), type VARCHAR(8), years INTEGER) PRIMARY KEY (name, type);
 
-INSERT INTO convicts VALUES FROM ("Joe", "deathRow", 4);
-INSERT INTO convicts VALUES FROM ("Spot", "Naughty", 10);
-INSERT INTO convicts VALUES FROM ("Snoopy", "Naughty", 3);
-INSERT INTO convicts VALUES FROM ("Tweety", "nice", 1);
-INSERT INTO convicts VALUES FROM ("Joe", "nice", 2);
+INSERT INTO convicts2 VALUES FROM ("Joe", "deathRow", 4);
+INSERT INTO convicts2 VALUES FROM ("Spot", "Naughty", 10);
+INSERT INTO convicts2 VALUES FROM ("Snoopy", "Naughty", 3);
+INSERT INTO convicts2 VALUES FROM ("Tweety", "nice", 1);
+INSERT INTO convicts2 VALUES FROM ("Joe", "nice", 2);
 
-SHOW convicts;
+SHOW convicts2;
 
-Naughtys <- select (type == "Naughty") convicts;
+Naughtys <- select (type == "Naughty") convicts2;
 old_Naughtys <- select (years > 9) Naughtys;
 
-deathRows_or_Naughtys <- Naughtys + (select (type == "deathRow") convicts);
+deathRows_or_Naughtys <- Naughtys + (select (type == "deathRow") convicts2);
 
 oldkills <- killers + old;
-killdrug <- killers + (select (charge == "drugs") convicts);
-youngkill <- (select (age < 25) convicts) + killers;
+killdrug <- killers + (select (charge == "drugs") convicts2);
+youngkill <- (select (age < 25) convicts2) + killers;
 
 CREATE TABLE sentence (type VARCHAR(10)) PRIMARY KEY (type);
 
 INSERT INTO VALUES FROM RELATION project (type);
-INSERT INTO sentence VALUES FROM RELATION project (type) convicts;
+INSERT INTO sentence VALUES FROM RELATION project (type) convicts2;
 
-a <- rename (aname, atype, ayears) (project (name, type, years) convicts);
-common_names <- project (name) (select (aname == name && atype != type) (a * convicts));
+a <- rename (aname, atype, ayears) (project (name, type, years) convicts2);
+common_names <- project (name) (select (aname == name && atype != type) (a * convicts2));
 answer <- common_names;
 
 SHOW answer;
 
-SHOW convicts;
-WRITE convicts;
+SHOW convicts2;
+WRITE convicts2;
 CLOSE convicts;
 
 CREATE TABLE newtable (this, that, things);
