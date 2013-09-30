@@ -99,6 +99,7 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 	string column;
 	int tempposition;
 	vector<string> tempkeyword;
+	vector<string> elements;
 	int validity;
 
 	//     starting with case 0: -  "0 - CREATE","1 - INSERT","2 - VARCHAR","3 - INTEGER","4 - VALUES","5 - RELATION","6 - SHOW","7 - <-","8 - select","9 - project","10 - rename","11 - WRITE","12 - CLOSE","13 - EXIT", "14 - OPEN"
@@ -335,11 +336,14 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 						else
 						{
 						tablename=solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2);
-						//tablevector[getTable("tempvector")].clear();
-						copy(tablevector[getTable("tempvector")],tablevector[getTable(tablename)]);
+						cout<<"before\n";
+						copy(tablevector[getTable("tempvector")],tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 2))].getDBMS());
+						cout<<"after\n";
 						}
+						tablevector[getTable("tempvector")].display();
+						cout<<"before2\n";
 						rename(words,getKeywordPosition(words, tempkeyword[i]),tablevector[getTable("tempvector")]);
-						tablevector[getTable("tempvector")]=tablevector[getTable(solveElementString(words,getKeywordPosition(words, tempkeyword[i]), 1))];
+						cout<<"after2\n";
 						words=replaceWords(words,getKeywordPosition(words, tempkeyword[i]),words.size(),"tempvector");
 					break;
 				default: cout << "Null keyword\n";
@@ -396,6 +400,50 @@ void Parser::callFunction(int keyword, int position, vector<string> words)
 			cout << " - ERROR: file does not exist" << endl;
 		break;
 		}
+	case 15:
+		// DELETE, make sure there is enough information for it, then execute.
+		validity = 2;
+		if (!valid(validity,words,position))
+		{
+		cout<< "ERROR: not a valid statement, needs 2 arguments with parenthesis\n";
+		break;
+		}
+
+		cout << "\nDeleting element from table "<<words[position+2]<<"\n";
+		tablename = words[position+2];
+		if (!isname(words[position+2]))
+		{
+			cout<<tablename<<" - ERROR: is not a created table at the moment.\n";
+			break;
+		}
+		elements.push_back(words[position+6]);
+		cout<< "\nGetting attribute "<<words[position+6]<<"\n"; //apply the first column info
+			for (int i = position+2; i<words.size(); i++)
+			{
+				if (words[i]==",")// if there are any more columns to add, then add them
+				{		
+					columnCounter++;
+					cout<< "Getting attribute "<<words[i+2]<<"\n";
+					elements.push_back(words[i+2]);
+					
+				}
+			}
+		for (int i=0; i<tablevector[getTable(tablename)].getRows(); i++)
+		{
+			for (int j=0; j<tablevector[getTable(tablename)].getColumns();j++)
+			{
+				if(tablevector[getTable(tablename)].getElement(i,j)!=elements[j])
+					j=tablevector[getTable(tablename)].getColumns();
+				if (j==tablevector[getTable(tablename)].getColumns()-1)
+				{
+					tablevector[getTable(tablename)].deleteRow(i);
+					j=0;
+					if(i!=0)
+						i--;
+				}
+			}
+		}
+		break;
 	default: cout << "how did that happen?\n";
 		break;
 	}
@@ -745,6 +793,7 @@ void Parser::rename(vector<string> words, int position, DBMS vec)
 			}
 	}
 	int counter=0;
+	cout<<"i am here so far\n";
 	for (int i=0; i<expression.size(); i++)
 		{
 			if (expression[i]=="("||expression[i]==")")
@@ -755,13 +804,18 @@ void Parser::rename(vector<string> words, int position, DBMS vec)
 			{
 				if(counter==0)
 				{
-					vec.setColumnName(vec.getColumn(columnnames[counter]),expression[i-1]);
+					cout<<"first one "<<counter<<" \n";
+					vec.setColumnName(counter,expression[i-1]);
 					counter++;
+					cout<<"first one done "<<counter<<" \n";
+					
 				}
 				if(counter>0)
 				{
-					vec.setColumnName(vec.getColumn(columnnames[counter]),expression[i+2]);
+					vec.setColumnName(counter,expression[i+2]);
+					cout<<counter<<"th one\n";
 					counter++;
+					
 				}
 			}
 		}
@@ -826,8 +880,6 @@ void Parser::combineTables(vector<string> words, int position)
 				{
 
 				copy(tablevector[getTable("tempvector")],tablevector[getTable(words[i+1])]);
-				tablevector[getTable("tempvector")].display();
-				tablevector[getTable(words[i-1])].display();
 
 				}
 				if (words[i]=="-")

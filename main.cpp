@@ -192,7 +192,7 @@ int main()
 				if (firstcol)
 				ins_string+=", ";
 				int num = atoi(tempattname.c_str()); 
-				if (!tempattname.empty() && tempattname.find_first_not_of("0123456789") == std::string::npos){ //check to see if it is an integer
+				if (!tempattname.empty() && tempattname.find_first_not_of("0123456789") == std::string::npos){ //http://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
 					stringstream ss;
 					ss<<num;
 					ins_string+=ss.str();
@@ -434,9 +434,41 @@ int main()
 			}
 		case 15: //Delete
 			{
-				string del_string;
-				parser.execute(del_string); //send to parsing
-				break;
+				string del_string, tname;
+			bool firstcol =false;
+
+			cout<<"Enter table where you are going to be deleting: ";
+			getline(cin, tname);
+
+			del_string="DELETE FROM "+tname+" VALUE FROM (";
+
+			int tcolumn = parser.getcsize(tname); 
+			parser.execute("SHOW "+tname+";");
+			for (int i = 0; i<tcolumn;i++)
+			{
+				string tempattname;
+				cout<<"Enter variable #"<<i+1<<" attribute: ";
+				getline(cin, tempattname);
+				if (firstcol)
+				del_string+=", ";
+				int num = atoi(tempattname.c_str()); 
+				if (!tempattname.empty() && tempattname.find_first_not_of("0123456789") == std::string::npos){ //check to see if it is an integer
+					stringstream ss;
+					ss<<num;
+					del_string+=ss.str();
+				} else {
+					del_string+='"'+tempattname+"\"";
+				}
+				
+				firstcol=true;
+			}
+			
+			del_string+=");"; //close parsing string
+			cout<<del_string<<"\n";
+			parser.execute(del_string); //send to parsing
+			parser.execute("SHOW "+tname+";"); //display table with new entry
+
+			break;
 			}
 		default:
 			break;
